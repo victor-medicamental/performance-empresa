@@ -432,5 +432,6 @@ function setTema(dark){document.body.classList.toggle('tema-marinho',dark);tmD.c
 tmL.addEventListener('click',()=>setTema(false));tmD.addEventListener('click',()=>setTema(true));
 try{if(localStorage.getItem('tema')==='dark')setTema(true);}catch(e){}
 </script>
+<div id="atualizado-em" style="position:fixed;top:10px;right:14px;z-index:99999;font-family:Arial,sans-serif;font-size:12px;color:#fff;background:rgba(0,0,0,.6);padding:4px 10px;border-radius:6px;">Atualizado em: 29/07/2026</div>
 </body>
 </html>

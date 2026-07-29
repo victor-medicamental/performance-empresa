@@ -1,796 +1,436 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Medicamental Intelligence · Performance YTD Maio 2026</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Performance Medicamental — Inteligência de Mercado · Junho/2026</title>
 <style>
-:root{
-  --bg:#0a1626; --bg2:#0e2138; --side:#0a1830; --side2:#0c2440;
-  --accent:#2f81f7; --accent2:#36c5f0; --glow:#5bc8ff;
-  --panel:#ffffff; --panel-bd:#e6ecf4; --app-bg:#eef2f7;
-  --ink:#15202e; --muted:#6b7a90; --soft:#9aa7b8;
-  --pos:#16a34a; --neg:#e23b3b;
-  --c1:#2f6fb5; --c2:#ed7d31; --c3:#9aa7b4; --c4:#f5b800; --c5:#5b9bd5; --c6:#2bb673;
-  --shadow:0 1px 3px rgba(16,40,80,.06),0 8px 24px rgba(16,40,80,.06);
-}
-*{box-sizing:border-box;margin:0;padding:0;}
-html,body{height:100%;}
-body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:var(--app-bg);color:var(--ink);overflow:hidden;}
-.app{display:flex;height:100vh;}
-
-/* ---------- SIDEBAR ---------- */
-.sidebar{
-  width:248px;flex:0 0 248px;background:
-    radial-gradient(120% 60% at 50% 0%, rgba(47,129,247,.25), transparent 55%),
-    linear-gradient(180deg,#091529 0%,#0a1d35 60%,#091529 100%);
-  color:#cdddf0;display:flex;flex-direction:column;position:relative;overflow:hidden;
-}
-.sidebar::before{content:"";position:absolute;inset:0;opacity:.10;
-  background-image:linear-gradient(90deg,rgba(91,200,255,.7) 1px,transparent 1px),linear-gradient(rgba(91,200,255,.7) 1px,transparent 1px);
-  background-size:38px 38px;-webkit-mask-image:radial-gradient(circle at 50% 18%,#000,transparent 70%);mask-image:radial-gradient(circle at 50% 18%,#000,transparent 70%);}
-.brand{padding:24px 22px 16px;position:relative;}
-.brand .glow{font-size:13px;letter-spacing:5px;font-weight:800;color:#fff;
-  text-shadow:0 0 12px rgba(91,200,255,.9),0 0 26px rgba(47,129,247,.55);}
-.brand .name{font-size:21px;font-weight:700;margin-top:3px;color:#eaf3ff;}
-.brand .name b{color:var(--accent2);}
-.brand .sep{height:1px;background:linear-gradient(90deg,var(--accent),transparent);margin-top:14px;}
-.nav{padding:8px 12px;position:relative;overflow-y:auto;flex:1;}
-.nav .grp{font-size:10px;letter-spacing:1.5px;color:#62809e;text-transform:uppercase;margin:14px 12px 6px;}
-.nav a{display:flex;align-items:center;gap:11px;padding:10px 13px;border-radius:9px;color:#bccfe4;
-  text-decoration:none;font-size:13.5px;font-weight:500;cursor:pointer;transition:.16s;margin-bottom:2px;}
-.nav a .dot{width:7px;height:7px;border-radius:50%;background:#34557a;flex:0 0 auto;transition:.16s;}
-.nav a:hover{background:rgba(91,160,255,.10);color:#fff;}
-.nav a.active{background:linear-gradient(90deg,rgba(47,129,247,.28),rgba(47,129,247,.05));color:#fff;
-  box-shadow:inset 2px 0 0 var(--accent2);}
-.nav a.active .dot{background:var(--accent2);box-shadow:0 0 8px var(--glow);}
-.sidefoot{padding:14px 20px;font-size:11px;color:#5f7a98;border-top:1px solid rgba(120,170,230,.12);position:relative;}
-
-/* ---------- MAIN ---------- */
-.main{flex:1;display:flex;flex-direction:column;min-width:0;}
-.topbar{height:62px;flex:0 0 62px;background:#fff;border-bottom:1px solid var(--panel-bd);
-  display:flex;align-items:center;justify-content:space-between;padding:0 26px;z-index:5;box-shadow:0 1px 0 rgba(0,0,0,.02);}
-.topbar .crumb{font-size:12px;color:var(--muted);}
-.topbar h1{font-size:19px;font-weight:700;color:var(--ink);margin-top:1px;}
-.topbar .right{display:flex;align-items:center;gap:14px;}
-.badge{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;font-size:12px;font-weight:700;
-  padding:7px 14px;border-radius:20px;letter-spacing:.3px;box-shadow:0 4px 12px rgba(47,129,247,.3);}
-.src-tag{font-size:11px;color:var(--soft);font-style:italic;}
-.scroll{flex:1;overflow-y:auto;padding:24px 26px 40px;}
-.view{display:none;animation:fade .35s ease;}
-.view.active{display:block;}
-@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
-
-/* ---------- COMPONENTS ---------- */
-.sub{color:var(--accent);font-size:13.5px;font-style:italic;margin:-2px 0 18px;}
-.grid{display:grid;gap:18px;}
-.g2{grid-template-columns:repeat(2,1fr);}
-.g3{grid-template-columns:repeat(3,1fr);}
-.g4{grid-template-columns:repeat(4,1fr);}
-@media(max-width:1100px){.g3,.g4{grid-template-columns:repeat(2,1fr);}}
-@media(max-width:760px){.g2,.g3,.g4{grid-template-columns:1fr;}}
-.card{background:var(--panel);border:1px solid var(--panel-bd);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;}
-.card .head{display:flex;align-items:center;justify-content:space-between;padding:14px 18px 0;}
-.card .head h3{font-size:13.5px;font-weight:700;color:#26384e;letter-spacing:.2px;}
-.card .body{padding:10px 16px 18px;}
-.chartwrap{position:relative;width:100%;height:300px;}
-.chartwrap.tall{height:380px;}
-.chartwrap.xl{height:430px;}
-
-/* KPI */
-.kpi{background:var(--panel);border:1px solid var(--panel-bd);border-radius:16px;padding:18px 20px;box-shadow:var(--shadow);position:relative;overflow:hidden;}
-.kpi::after{content:"";position:absolute;right:-20px;top:-20px;width:90px;height:90px;border-radius:50%;background:radial-gradient(circle,rgba(47,129,247,.10),transparent 70%);}
-.kpi .lab{font-size:11.5px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);font-weight:600;}
-.kpi .val{font-size:29px;font-weight:800;color:var(--ink);margin-top:6px;line-height:1;font-variant-numeric:tabular-nums;}
-.kpi .delta{font-size:12.5px;font-weight:700;margin-top:9px;display:inline-flex;align-items:center;gap:4px;}
-.kpi .delta.pos{color:var(--pos);} .kpi .delta.neg{color:var(--neg);}
-.kpi .note{font-size:11.5px;color:var(--soft);margin-top:6px;}
-.kpi.accent{background:linear-gradient(135deg,#0e2138,#143456);color:#fff;border:none;}
-.kpi.accent .lab{color:#9fc1e8;} .kpi.accent .val{color:#fff;} .kpi.accent .note{color:#9fc1e8;}
-
-/* TABS */
-.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
-.tabs button{background:#fff;border:1px solid var(--panel-bd);color:var(--muted);font-weight:600;font-size:13px;
-  padding:9px 16px;border-radius:22px;cursor:pointer;transition:.15s;}
-.tabs button:hover{border-color:var(--accent);color:var(--accent);}
-.tabs button.active{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;border-color:transparent;
-  box-shadow:0 4px 12px rgba(47,129,247,.28);}
-.tabpane{display:none;} .tabpane.active{display:block;}
-
-/* TABLE */
-.tablewrap{overflow-x:auto;}
-table.dt{width:100%;border-collapse:collapse;font-size:13px;}
-table.dt th{position:sticky;top:0;background:#13243b;color:#fff;padding:10px 12px;text-align:left;font-weight:600;font-size:12px;white-space:nowrap;}
-table.dt td{padding:9px 12px;border-bottom:1px solid #eef2f7;}
-table.dt tbody tr{transition:.12s;} table.dt tbody tr:hover{background:#f1f6fd;}
-table.dt td.num{text-align:right;font-variant-numeric:tabular-nums;}
-.chip{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11.5px;font-weight:700;}
-.chip.up{background:#e3f6ea;color:var(--pos);} .chip.dn{background:#fde7e7;color:var(--neg);} .chip.flat{background:#eef1f5;color:var(--muted);}
-.search{border:1px solid var(--panel-bd);border-radius:20px;padding:8px 14px;font-size:13px;width:230px;outline:none;}
-.search:focus{border-color:var(--accent);}
-
-/* INSIGHTS */
-.insights{background:linear-gradient(135deg,#0e2138,#15375c);border-radius:16px;padding:22px 24px;color:#dce9f7;box-shadow:var(--shadow);}
-.insights h3{color:#fff;font-size:15px;margin-bottom:14px;display:flex;align-items:center;gap:9px;}
-.insights h3 .pill{background:var(--c6);color:#fff;font-size:11px;padding:3px 11px;border-radius:14px;}
-.insights ul{list-style:none;display:flex;flex-direction:column;gap:11px;}
-.insights li{font-size:13px;line-height:1.55;padding-left:20px;position:relative;}
-.insights li::before{content:"";position:absolute;left:0;top:7px;width:8px;height:8px;border-radius:50%;background:var(--accent2);box-shadow:0 0 8px var(--glow);}
-
-/* HERO overview */
-.hero{background:
-  radial-gradient(90% 120% at 12% -10%, rgba(47,129,247,.35), transparent 55%),
-  linear-gradient(120deg,#08172b,#0d2645 55%,#08172b);
-  border-radius:18px;padding:30px 32px;color:#eaf3ff;position:relative;overflow:hidden;margin-bottom:20px;}
-.hero::before{content:"";position:absolute;inset:0;opacity:.12;
-  background-image:linear-gradient(90deg,rgba(91,200,255,.7) 1px,transparent 1px),linear-gradient(rgba(91,200,255,.7) 1px,transparent 1px);
-  background-size:42px 42px;-webkit-mask-image:radial-gradient(circle at 85% 50%,#000,transparent 70%);mask-image:radial-gradient(circle at 85% 50%,#000,transparent 70%);}
-.hero .ey{font-size:12px;letter-spacing:4px;color:var(--accent2);font-weight:700;position:relative;}
-.hero h2{font-size:30px;font-weight:800;margin-top:6px;position:relative;text-shadow:0 0 22px rgba(47,129,247,.4);}
-.hero p{font-size:14px;color:#a9c6e6;margin-top:8px;max-width:680px;position:relative;line-height:1.5;}
-
-.sec-title{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin:26px 4px 4px;}
-
-/* mobile */
-.hamb{display:none;}
-@media(max-width:820px){
-  body{overflow:auto;}
-  .app{flex-direction:column;height:auto;}
-  .sidebar{width:100%;flex:none;}
-  .nav{display:none;flex-direction:column;}
-  .nav.open{display:flex;}
-  .nav .grp{display:none;}
-  .sidefoot{display:none;}
-  .hamb{display:inline-flex;background:none;border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:8px;padding:6px 10px;cursor:pointer;font-size:16px;}
-  .brand{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;}
-  .main{height:auto;} .scroll{overflow:visible;height:auto;}
-}
+  :root{--azul:#12233f;--azul2:#2e5496;--azul3:#dbe5f1;--acc:#3aa0ff;--verde:#1e7d46;--vermelho:#c0392b;--cinza:#f4f6f9;--linha:#dde3ec;--txt:#1c2b3a;--mut:#5a6b7d}
+  *{box-sizing:border-box}
+  body{margin:0;background:#eef1f5;color:var(--txt);font-family:"Segoe UI",Arial,sans-serif;font-size:15px;line-height:1.5}
+  .topbar{position:sticky;top:0;z-index:30;background:var(--azul);display:flex;align-items:center;gap:2px;padding:0 12px;flex-wrap:wrap;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+  .brand{color:#fff;font-weight:600;margin-right:12px;padding:12px 4px;font-size:15px}
+  .topbar button{background:none;border:none;color:#c9d6ea;font-size:13.5px;padding:14px 12px;cursor:pointer;border-bottom:3px solid transparent}
+  .topbar button:hover{color:#fff}.topbar button.on{color:#fff;border-bottom-color:var(--acc)}
+  main{max-width:none;width:100%;margin:0;padding:18px clamp(14px,3vw,40px) 40px;min-height:calc(100vh - 50px)}
+  @media(max-width:600px){main{padding:14px 12px 40px}}
+  .tabpanel{display:none}.tabpanel.active{display:block;animation:fade .25s}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  h2.sec{font-size:20px;font-weight:600;margin:6px 0 2px;color:var(--azul)}
+  .sub{color:var(--mut);font-size:13px;margin:0 0 14px}
+  .card{background:#fff;border:1px solid var(--linha);border-radius:12px;padding:18px 20px;margin:14px 0;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+  .kpis{display:flex;flex-wrap:wrap;gap:12px;margin:6px 0 14px}
+  .kpi{flex:1 1 150px;background:var(--cinza);border-radius:10px;padding:14px 16px}
+  .kpi .l{font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:.4px}
+  .kpi .v{font-size:23px;font-weight:600;margin-top:4px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}@media(max-width:820px){.grid2{grid-template-columns:1fr}}
+  .split{display:grid;grid-template-columns:1fr 1.5fr;gap:22px;align-items:start}
+  .split .dt{margin-top:0}@media(max-width:900px){.split{grid-template-columns:1fr}}
+  .htitle{font-size:14px;font-weight:600;color:var(--azul);margin:2px 0 8px}
+  .tabbar{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 14px}
+  .tabbar button{border:1px solid var(--azul2);background:#fff;color:var(--azul2);padding:6px 14px;border-radius:20px;font-size:13px;cursor:pointer}
+  .tabbar button.on{background:var(--azul2);color:#fff}
+  .controls{display:flex;gap:8px;margin:2px 0 10px}
+  .controls button{border:1px solid var(--azul2);background:#fff;color:var(--azul2);padding:4px 11px;border-radius:16px;font-size:12px;cursor:pointer}
+  .controls button.on{background:var(--azul2);color:#fff}
+  .capa{position:relative;overflow:hidden;background:radial-gradient(130% 120% at 50% 15%,#17304f 0%,#0e1e34 55%,#0a1526 100%);color:#fff;border-radius:0;width:100vw;margin-left:calc(50% - 50vw);margin-top:0;min-height:calc(100vh - 50px);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:44px 20px}
+  body.on-capa main{padding:0;min-height:0}
+  body.on-capa .pagefoot{display:none}
+  .capabg{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+  .capactt{position:relative;z-index:1;max-width:780px}
+  .logo{font-size:30px;font-weight:700;letter-spacing:.5px}.logo span{color:#5b9be0}
+  .pill{display:inline-block;margin-top:12px;border:1px solid rgba(255,255,255,.3);color:#cfe0f5;font-size:12px;letter-spacing:2px;padding:6px 16px;border-radius:20px}
+  .cdiv{width:56px;height:3px;background:#5b9be0;border-radius:2px;margin:26px auto}
+  .capactt h1{font-size:44px;margin:0;font-weight:700;line-height:1.1}
+  .csub{font-size:18px;font-weight:600;color:#e6eef9;margin:12px 0 4px}
+  .ccaps{font-size:12.5px;letter-spacing:1.5px;color:#9db6d6;margin:0}
+  .obs{margin:22px auto 0;max-width:640px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);border-radius:10px;padding:10px 16px;font-size:13.5px;color:#dbe6f5}
+  .enter{margin-top:26px;background:#fff;color:#12233f;border:none;border-radius:26px;padding:14px 30px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+  .enter:hover{background:#eaf1fb}
+  .capafoot{position:relative;z-index:1;margin-top:34px;font-size:12px;color:#7f97ba}
+  .capamarca{position:absolute;right:18px;bottom:12px;z-index:1;font-style:italic;font-weight:600;color:rgba(219,230,245,.55);font-size:13px}
+  .pos{color:#7CFFB0}.neg{color:#ffb0a8}.htext{color:var(--verde)}
+  .pagefoot{text-align:right;padding:14px clamp(14px,3vw,40px);color:var(--mut);font-style:italic;font-weight:600;font-size:13px;border-top:1px solid var(--linha);background:#fff}
+  /* barras (offline) */
+  .bclegend{display:flex;gap:16px;font-size:12px;color:var(--mut);margin-bottom:10px}
+  .bclegend i{display:inline-block;width:12px;height:12px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+  .bclegend i.g{background:#a9b7cc}.bclegend i.b{background:#2e5496}
+  .bc{display:flex;flex-direction:column;gap:9px}
+  .bcrow{display:grid;grid-template-columns:150px 1fr;gap:10px;align-items:center;font-size:12.5px}
+  .bclbl{text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .bcbars{display:flex;flex-direction:column;gap:3px}
+  .bcbar{display:flex;align-items:center;gap:6px}
+  .bcfill{height:13px;border-radius:3px;min-width:2px}.bcfill.g{background:#a9b7cc}.bcfill.b{background:#2e5496}
+  .bcvar{height:15px;border-radius:3px;min-width:2px}
+  .bcval{font-size:11px;color:var(--mut);white-space:nowrap}
+  @media(max-width:820px){.bcrow{grid-template-columns:112px 1fr}}
+  .dt{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:16px}
+  .dt th,.dt td{padding:6px 9px;text-align:right;border-bottom:1px solid var(--linha)}
+  .dt th:first-child,.dt td:first-child{text-align:left}
+  .dt thead th{background:var(--azul);color:#fff;font-size:12px;font-weight:600}
+  .dt tbody tr:nth-child(even){background:#f7f9fc}
+  .dt .pn{color:var(--verde);font-weight:600}.dt .nn{color:var(--vermelho);font-weight:600}
+  .insight{background:#eef4ff;border-left:4px solid var(--acc);border-radius:8px;padding:12px 16px;margin:12px 0 16px;font-size:13.5px}
+  .insight b{color:var(--azul)}.insight ul{margin:6px 0 0;padding-left:18px}.insight li{margin:2px 0}
+  /* seletor de tema */
+  .themesw{margin-left:auto;display:flex;gap:6px;align-items:center;padding:8px 4px}
+  .themesw button{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.25);color:#cfe0f5;font-size:12px;padding:6px 12px;border-radius:16px;cursor:pointer}
+  .themesw button.on{background:var(--acc);border-color:var(--acc);color:#08182c;font-weight:600}
+  /* tema azul marinho */
+  body.tema-marinho{background:#0a1526;color:#e6eef9}
+  body.tema-marinho h2.sec{color:#dbe6f5}
+  body.tema-marinho .sub,body.tema-marinho .htitle{color:#9db6d6}
+  body.tema-marinho .card{background:#12233f;border-color:#26364f;box-shadow:none}
+  body.tema-marinho .kpi{background:#17304f}
+  body.tema-marinho .kpi .l{color:#9db6d6}
+  body.tema-marinho .insight{background:#13294a}
+  body.tema-marinho .insight b{color:#cfe0f5}
+  body.tema-marinho .bclbl,body.tema-marinho .bcval,body.tema-marinho .bclegend{color:#c3d6f2}
+  body.tema-marinho .dt td{border-bottom-color:#26364f;color:#e6eef9}
+  body.tema-marinho .dt thead th{background:#0e1e34}
+  body.tema-marinho .dt tbody tr:nth-child(even){background:#17304f}
+  body.tema-marinho .dt .pn{color:#7CFFB0}body.tema-marinho .dt .nn{color:#ff9a90}
+  body.tema-marinho .tabbar button,body.tema-marinho .controls button{background:#17304f;color:#cfe0f5;border-color:#3a4d6b}
+  body.tema-marinho .tabbar button.on,body.tema-marinho .controls button.on{background:var(--azul2);color:#fff;border-color:var(--azul2)}
+  body.tema-marinho .pagefoot{background:#0a1526;color:#9db6d6;border-top-color:#26364f}
 </style>
 </head>
 <body>
-<div class="app">
 
-  <!-- ===== SIDEBAR ===== -->
-  <aside class="sidebar">
-    <div class="brand">
-      <div>
-        <div class="glow">INTELLIGENCE</div>
-        <div class="name">Medicamental</div>
-      </div>
-      <button class="hamb" id="hamb">☰</button>
-    </div>
-    <div class="brand" style="padding-top:0;padding-bottom:0"><div class="sep"></div></div>
-    <nav class="nav" id="nav">
-      <div class="grp">Resumo</div>
-      <a data-view="overview" class="active"><span class="dot"></span>Visão Geral</a>
-      <a data-view="iqvia"><span class="dot"></span>IQVIA · Mercado</a>
-      <div class="grp">Canais</div>
-      <a data-view="empresa"><span class="dot"></span>Empresa</a>
-      <a data-view="cd"><span class="dot"></span>C.D. · Centro de Distribuição</a>
-      <a data-view="farma"><span class="dot"></span>Farma</a>
-      <a data-view="ol"><span class="dot"></span>O.L</a>
-      <a data-view="digital"><span class="dot"></span>Digital · Web & B2List</a>
-      <a data-view="hpc"><span class="dot"></span>HPC</a>
-      <a data-view="hospitalar"><span class="dot"></span>Hospitalar</a>
-    </nav>
-    <div class="sidefoot">Fonte: Power BI · Web · B2List<br>YTD Maio 2026</div>
-  </aside>
-
-  <!-- ===== MAIN ===== -->
-  <main class="main">
-    <header class="topbar">
-      <div>
-        <div class="crumb" id="crumb">Resumo / Visão Geral</div>
-        <h1 id="ptitle">Visão Geral</h1>
-      </div>
-      <div class="right">
-        <span class="src-tag">Inteligência de Mercado</span>
-        <span class="badge">YTD · MAIO 2026</span>
-      </div>
-    </header>
-    <div class="scroll">
-
-      <!-- ====== OVERVIEW ====== -->
-      <section class="view active" id="view-overview">
-        <div class="hero">
-          <div class="ey">INTELIGÊNCIA DE MERCADO</div>
-          <h2>Performance Consolidada — YTD Maio 2026</h2>
-          <p>Faturamento da empresa recua -9% no ano, mas os canais digitais explodem: Web +91% e HPC +110%. IQVIA (YTD abril) mostra mercado +12,8% contra +6,7% da Medicamental — gap de 6,1 p.p. a recuperar.</p>
-        </div>
-        <div class="grid g4">
-          <div class="kpi accent"><div class="lab">Faturamento Empresa YTD26</div><div class="val">R$ <span class="count" data-target="204.9" data-dec="1"></span>M</div><div class="delta neg">▼ -9% vs YTD25 (R$ 225,7M)</div></div>
-          <div class="kpi"><div class="lab">Mercado IQVIA (YTD abr)</div><div class="val">+<span class="count" data-target="12.8" data-dec="1"></span>%</div><div class="delta neg">Medicamental +6,7% · gap 6,1 p.p.</div></div>
-          <div class="kpi"><div class="lab">Maior alta — Web</div><div class="val pos" style="color:var(--pos)">+<span class="count" data-target="91"></span>%</div><div class="note">VMD +74% · POS +34%</div></div>
-          <div class="kpi"><div class="lab">Maior baixa — O.L</div><div class="val" style="color:var(--neg)">-<span class="count" data-target="19"></span>%</div><div class="note">Grandes Contas -48%</div></div>
-        </div>
-        <div class="grid g2" style="margin-top:18px">
-          <div class="card"><div class="head"><h3>Crescimento por canal — YTD25 vs YTD26</h3></div><div class="body"><div class="chartwrap"><canvas id="ov_growth"></canvas></div></div></div>
-          <div class="card"><div class="head"><h3>Faturamento por canal — YTD26 (R$)</h3></div><div class="body"><div class="chartwrap"><canvas id="ov_fat"></canvas></div></div></div>
-        </div>
-      </section>
-
-      <!-- ====== IQVIA ====== -->
-      <section class="view" id="view-iqvia">
-        <p class="sub">Performance IQVIA YTD abril 2025 vs 2026 — Mercado Montado nos estados de atuação · Mercado cresce 12,8% e a Medicamental 6,7%: gap de 6,1 p.p. a recuperar</p>
-        <div class="grid g4">
-          <div class="kpi accent"><div class="lab">YTD Atual</div><div class="val">R$ <span class="count" data-target="3.08" data-dec="2"></span>bi</div><div class="note">3.079.327.413</div></div>
-          <div class="kpi"><div class="lab">YTD Anterior</div><div class="val">R$ <span class="count" data-target="2.74" data-dec="2"></span>bi</div><div class="note">2.739.488.625</div></div>
-          <div class="kpi"><div class="lab">Crescimento Total</div><div class="val pos" style="color:var(--pos)">+<span class="count" data-target="12.41" data-dec="2"></span>%</div><div class="note">Concorrentes +12,80%</div></div>
-          <div class="kpi"><div class="lab">Grupo Medicamental</div><div class="val">+<span class="count" data-target="6.70" data-dec="2"></span>%</div><div class="note">gap de 6,1 p.p.</div></div>
-        </div>
-        <div class="grid g2" style="margin-top:18px">
-          <div class="card">
-            <div class="head"><h3>TOP 10 Laboratórios IQVIA — R$ PPP</h3><input class="search" id="iqviaSearch" placeholder="Filtrar laboratório..."></div>
-            <div class="body tablewrap">
-              <table class="dt" id="iqviaTable">
-                <thead><tr><th>Laboratório</th><th class="num">YTD 04/25</th><th class="num">Share 25</th><th class="num">YTD 04/26</th><th class="num">Share 26</th></tr></thead>
-                <tbody></tbody>
-              </table>
-            </div>
-          </div>
-          <div>
-            <div class="card" style="margin-bottom:18px"><div class="head"><h3>Share Medicamental por laboratório — 25 vs 26</h3></div><div class="body"><div class="chartwrap"><canvas id="iqvia_share"></canvas></div></div></div>
-            <div class="insights">
-              <h3><span class="pill">Estratégico</span> Destaques</h3>
-              <ul>
-                <li>Mercado montado cresce <b>12,80%</b> vs <b>6,70%</b> da Medicamental — oportunidade de captura de share nos estados de atuação.</li>
-                <li><b>Neo Química</b> é o principal destaque positivo: share sobe de 16,95% para 20,56%.</li>
-                <li><b>Eurofarma</b> cresce em vendas, mas reduz participação relativa da Medicamental.</li>
-                <li><b>Biolab, Natulab e Legrand</b> caem em share — prioridade para ações comerciais.</li>
-                <li>Recuperar participação nos principais labs acelera o crescimento e reduz o gap com o mercado.</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ====== EMPRESA ====== -->
-      <section class="view" id="view-empresa">
-        <p class="sub">Performance empresa YTD maio 2025 vs 2026 · Faturamento recua -9% (R$ 225,7M → R$ 204,9M) e a positivação cai -6%; SP ganha peso (32% → 46%) enquanto GO encolhe (34% → 22%)</p>
-        <div class="grid g4">
-          <div class="kpi accent"><div class="lab">Faturamento YTD26</div><div class="val">R$ <span class="count" data-target="204.9" data-dec="1"></span>M</div><div class="delta neg">▼ -9%</div></div>
-          <div class="kpi"><div class="lab">Faturamento YTD25</div><div class="val">R$ <span class="count" data-target="225.7" data-dec="1"></span>M</div><div class="note">VD NF + POS</div></div>
-          <div class="kpi"><div class="lab">CD SP</div><div class="val">32% → <span style="color:var(--pos)">46%</span></div><div class="note">ganho de participação</div></div>
-          <div class="kpi"><div class="lab">CD GO</div><div class="val">34% → <span style="color:var(--neg)">22%</span></div><div class="note">perda de participação</div></div>
-        </div>
-        <div class="grid g2" style="margin-top:18px">
-          <div class="card"><div class="head"><h3>Comparativo de vendas — VD NF + POS</h3></div><div class="body"><div class="chartwrap"><canvas id="emp_comp"></canvas></div></div></div>
-          <div class="card"><div class="head"><h3>Share Empresa por C.D. (R$)</h3></div><div class="body"><div class="chartwrap"><canvas id="emp_share"></canvas></div></div></div>
-          <div class="card"><div class="head"><h3>Share Regional (R$)</h3></div><div class="body"><div class="chartwrap"><canvas id="emp_reg"></canvas></div></div></div>
-          <div class="card"><div class="head"><h3>Crescimento por Regional</h3></div><div class="body"><div class="chartwrap"><canvas id="emp_cresc"></canvas></div></div></div>
-        </div>
-        <div class="sec-title">Top Fabricantes e Produtos — YTD maio 2026 · Top 10 fabricantes &gt; 75% das vendas</div>
-        <div class="grid g2" style="margin-top:8px">
-          <div class="card"><div class="head"><h3>Top 10 Fabricantes</h3></div><div class="body"><div class="chartwrap tall"><canvas id="emp_fab"></canvas></div></div></div>
-          <div class="card"><div class="head"><h3>Top 10 Produtos</h3></div><div class="body"><div class="chartwrap tall"><canvas id="emp_prod"></canvas></div></div></div>
-        </div>
-      </section>
-
-      <!-- ====== C.D. (CENTRO DE DISTRIBUIÇÃO) ====== -->
-      <section class="view" id="view-cd">
-        <p class="sub">Performance empresa por C.D. (Centro de Distribuição) maio 2025 vs 2026 · Faturamento recua -9% (R$ 225,7M → R$ 204,9M); nas vendas SP ganha peso (32% → 46%) e GO encolhe (34% → 22%). Devolução sobe +44% (R$ 4,92M → R$ 7,09M), concentrada em SP (49% → 58%, +70%)</p>
-        <div class="grid g4">
-          <div class="kpi accent"><div class="lab">Faturamento YTD26</div><div class="val">R$ <span class="count" data-target="204.9" data-dec="1"></span>M</div><div class="delta neg">▼ -9%</div></div>
-          <div class="kpi"><div class="lab">Devolução YTD26</div><div class="val">R$ <span class="count" data-target="7.09" data-dec="2"></span>M</div><div class="delta neg">▲ +44% vs R$ 4,92M</div></div>
-          <div class="kpi"><div class="lab">Devolução CD SP</div><div class="val">49% → <span style="color:var(--neg)">58%</span></div><div class="note">concentra as devoluções</div></div>
-          <div class="kpi"><div class="lab">Maior alta de devolução</div><div class="val" style="color:var(--neg)">SP +70%</div><div class="note">ES recua -33%</div></div>
-        </div>
-        <div class="grid g2" style="margin-top:18px">
-          <div class="card"><div class="head"><h3>Vendas — Share Empresa por C.D. (R$)</h3></div><div class="body"><div class="chartwrap"><canvas id="cd_vendas"></canvas></div></div></div>
-          <div class="card"><div class="head"><h3>Devolução — Share Empresa por C.D. (R$)</h3></div><div class="body"><div class="chartwrap"><canvas id="cd_devol"></canvas></div></div></div>
-        </div>
-        <div class="grid" style="margin-top:18px">
-          <div class="card"><div class="head"><h3>Crescimento da Devolução por UF — YTD25 vs YTD26</h3></div><div class="body"><div class="chartwrap"><canvas id="cd_cresc"></canvas></div></div></div>
-        </div>
-        <div class="sec-title">Comparativo empresa — Devolução YTD 2025 vs 2026</div>
-        <div class="grid g2" style="margin-top:8px">
-          <div class="card"><div class="head"><h3>Comparativo empresa em unidades YTD 2025 vs 2026</h3></div><div class="body"><div class="chartwrap tall"><canvas id="cd_unid"></canvas></div></div></div>
-          <div class="card"><div class="head"><h3>Comparativo empresa em movimentos YTD 2025 vs 2026</h3></div><div class="body"><div class="chartwrap tall"><canvas id="cd_mov"></canvas></div></div></div>
-        </div>
-      </section>
-
-      <!-- ====== FARMA ====== -->
-      <section class="view" id="view-farma">
-        <p class="sub">Performance empresa FARMA YTD maio 2025 vs 2026 · Canal recua -9% no faturamento</p>
-        <div class="grid g4">
-          <div class="kpi accent"><div class="lab">Faturamento YTD26</div><div class="val">R$ <span class="count" data-target="136.8" data-dec="1"></span>M</div><div class="delta neg">▼ -9%</div></div>
-          <div class="kpi"><div class="lab">Faturamento YTD25</div><div class="val">R$ <span class="count" data-target="149.5" data-dec="1"></span>M</div></div>
-          <div class="kpi"><div class="lab">CD SP</div><div class="val">23% → <span style="color:var(--pos)">38%</span></div></div>
-          <div class="kpi"><div class="lab">Maior alta regional</div><div class="val pos" style="color:var(--pos)">ROSA +21%</div></div>
-        </div>
-        <div class="grid g2" style="margin-top:18px">
-          <div class="card"><div class="head"><h3>Comparativo de vendas — VD NF + POS</h3></div><div class="body"><div class="chartwrap"><canvas id="far_comp"></canvas></div></div></div>
-          <div class="card"><div class="head"><h3>Share Empresa por C.D. (R$)</h3></div><div class="body"><div class="chartwrap"><canvas id="far_share"></canvas></div></div></div>
-          <div class="card"><div class="head"><h3>Share Regional (R$)</h3></div><div class="body"><div class="chartwrap"><canvas id="far_reg"></canvas></div></div></div>
-          <div class="card"><div class="head"><h3>Crescimento por Regional</h3></div><div class="body"><div class="chartwrap"><canvas id="far_cresc"></canvas></div></div></div>
-        </div>
-      </section>
-
-      <!-- ====== O.L ====== -->
-      <section class="view" id="view-ol">
-        <p class="sub">Performance empresa O.L (sem O.L exclusivo) YTD maio 2025 vs 2026 · Maior vetor negativo do consolidado: -19% no faturamento e -11% no POS, com Grandes Contas (-48%) e só RJ (+32%) no positivo</p>
-        <div class="grid g4">
-          <div class="kpi accent"><div class="lab">Faturamento YTD26</div><div class="val">R$ <span class="count" data-target="49.8" data-dec="1"></span>M</div><div class="delta neg">▼ -19%</div></div>
-          <div class="kpi"><div class="lab">Faturamento YTD25</div><div class="val">R$ <span class="count" data-target="61.2" data-dec="1"></span>M</div></div>
-          <div class="kpi"><div class="lab">Única alta — KRIS RJ</div><div class="val pos" style="color:var(--pos)">+32%</div></div>
-          <div class="kpi"><div class="lab">Grandes Contas</div><div class="val" style="color:var(--neg)">-48%</div></div>
-        </div>
-        <div class="grid g2" style="margin-top:18px">
-          <div class="card"><div class="head"><h3>Comparativo de vendas — VD NF + POS</h3></div><div class="body"><div class="chartwrap"><canvas id="ol_comp"></canvas></div></div></div>
-          <div class="card"><div class="head"><h3>Share Empresa por C.D. (R$)</h3></div><div class="body"><div class="chartwrap"><canvas id="ol_share"></canvas></div></div></div>
-          <div class="card"><div class="head"><h3>Share Regional (R$)</h3></div><div class="body"><div class="chartwrap"><canvas id="ol_reg"></canvas></div></div></div>
-          <div class="card"><div class="head"><h3>Crescimento por Regional</h3></div><div class="body"><div class="chartwrap"><canvas id="ol_cresc"></canvas></div></div></div>
-        </div>
-        <div class="sec-title">Top Fabricantes O.L por Regional</div>
-        <div class="tabs" id="olTabs" style="margin-top:8px">
-          <button class="active" data-ol="lucilene">Lucilene</button>
-          <button data-ol="rosa">Rosa</button>
-          <button data-ol="kris">Kris</button>
-          <button data-ol="alberto">Alberto</button>
-          <button data-ol="gc">Grandes Contas</button>
-          <button data-ol="joseane">Joseane</button>
-        </div>
-        <div class="card"><div class="head"><h3 id="olRegTitle">LUCILENE</h3></div><div class="body"><div class="chartwrap tall"><canvas id="ol_regional"></canvas></div></div></div>
-      </section>
-
-      <!-- ====== DIGITAL ====== -->
-      <section class="view" id="view-digital">
-        <div class="tabs" id="digTabs">
-          <button class="active" data-dig="web">WEB</button>
-          <button data-dig="b2">B2List</button>
-        </div>
-
-        <div class="tabpane active" id="dig-web">
-          <p class="sub">Performance WEB YTD maio 2025 vs 2026 · Maior destaque positivo: faturamento +91%, VMD +74% e POS +34%, com todas as regionais acima de +70%</p>
-          <div class="grid g4">
-            <div class="kpi accent"><div class="lab">Faturamento YTD26</div><div class="val">R$ <span class="count" data-target="16.8" data-dec="1"></span>M</div><div class="delta pos">▲ +91%</div></div>
-            <div class="kpi"><div class="lab">Faturamento YTD25</div><div class="val">R$ <span class="count" data-target="8.8" data-dec="1"></span>M</div></div>
-            <div class="kpi"><div class="lab">VMD</div><div class="val pos" style="color:var(--pos)">+74%</div></div>
-            <div class="kpi"><div class="lab">POS</div><div class="val pos" style="color:var(--pos)">+34%</div></div>
-          </div>
-          <div class="grid g3" style="margin-top:18px">
-            <div class="card"><div class="head"><h3>Comparativo de vendas</h3></div><div class="body"><div class="chartwrap"><canvas id="web_comp"></canvas></div></div></div>
-            <div class="card"><div class="head"><h3>Share Empresa por C.D.</h3></div><div class="body"><div class="chartwrap"><canvas id="web_share"></canvas></div></div></div>
-            <div class="card"><div class="head"><h3>VMD 2025 vs 2026</h3></div><div class="body"><div class="chartwrap"><canvas id="web_vmd"></canvas></div></div></div>
-          </div>
-          <div class="grid g2" style="margin-top:18px">
-            <div class="card"><div class="head"><h3>Share Regional (R$)</h3></div><div class="body"><div class="chartwrap"><canvas id="web_reg"></canvas></div></div></div>
-            <div class="card"><div class="head"><h3>Crescimento por Regional</h3></div><div class="body"><div class="chartwrap"><canvas id="web_cresc"></canvas></div></div></div>
-          </div>
-          <div class="sec-title">Top Fabricantes e Produtos — WEB · 59% das vendas nos Top 10</div>
-          <div class="grid g2" style="margin-top:8px">
-            <div class="card"><div class="head"><h3>Top 10 Fabricantes</h3></div><div class="body"><div class="chartwrap tall"><canvas id="web_fab"></canvas></div></div></div>
-            <div class="card"><div class="head"><h3>Top 10 Produtos</h3></div><div class="body"><div class="chartwrap tall"><canvas id="web_prod"></canvas></div></div></div>
-          </div>
-        </div>
-
-        <div class="tabpane" id="dig-b2">
-          <p class="sub">Performance empresa maio/2025 a maio/2026 — B2List · Queda de -83% de mar-26 a mai-26</p>
-          <div class="card"><div class="head"><h3>Performance mensal — Maio/25 a Mai/26 (VD NF + POS)</h3></div><div class="body"><div class="chartwrap tall"><canvas id="b2_mensal"></canvas></div></div></div>
-          <div class="grid g3" style="margin-top:18px">
-            <div class="card"><div class="head"><h3>Vendas YTD por Regional</h3></div><div class="body"><div class="chartwrap"><canvas id="b2_comp"></canvas></div></div></div>
-            <div class="card"><div class="head"><h3>Share Empresa por C.D.</h3></div><div class="body"><div class="chartwrap"><canvas id="b2_share"></canvas></div></div></div>
-            <div class="card"><div class="head"><h3>VMD YTD 2026</h3></div><div class="body"><div class="chartwrap"><canvas id="b2_vmd"></canvas></div></div></div>
-          </div>
-          <div class="sec-title">Top Fabricantes e Produtos — B2List · 82% das vendas nos Top 10</div>
-          <div class="grid g2" style="margin-top:8px">
-            <div class="card"><div class="head"><h3>Top 10 Fabricantes</h3></div><div class="body"><div class="chartwrap tall"><canvas id="b2_fab"></canvas></div></div></div>
-            <div class="card"><div class="head"><h3>Top 10 Produtos</h3></div><div class="body"><div class="chartwrap tall"><canvas id="b2_prod"></canvas></div></div></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ====== HPC ====== -->
-      <section class="view" id="view-hpc">
-        <p class="sub">Performance HPC YTD maio 2025 vs 2026 · Segundo grande motor de crescimento: +110% no faturamento e +111% no VMD, com Alberto (+258%)</p>
-        <div class="grid g4">
-          <div class="kpi accent"><div class="lab">Faturamento YTD26</div><div class="val">R$ <span class="count" data-target="23.2" data-dec="1"></span>M</div><div class="delta pos">▲ +110%</div></div>
-          <div class="kpi"><div class="lab">Faturamento YTD25</div><div class="val">R$ <span class="count" data-target="11.0" data-dec="1"></span>M</div></div>
-          <div class="kpi"><div class="lab">VMD</div><div class="val pos" style="color:var(--pos)">+111%</div></div>
-          <div class="kpi"><div class="lab">Destaque — Alberto</div><div class="val pos" style="color:var(--pos)">+258%</div></div>
-        </div>
-        <div class="grid g3" style="margin-top:18px">
-          <div class="card"><div class="head"><h3>Comparativo de vendas</h3></div><div class="body"><div class="chartwrap"><canvas id="hpc_comp"></canvas></div></div></div>
-          <div class="card"><div class="head"><h3>Share Empresa por C.D.</h3></div><div class="body"><div class="chartwrap"><canvas id="hpc_share"></canvas></div></div></div>
-          <div class="card"><div class="head"><h3>VMD 2025 vs 2026</h3></div><div class="body"><div class="chartwrap"><canvas id="hpc_vmd"></canvas></div></div></div>
-        </div>
-        <div class="grid g2" style="margin-top:18px">
-          <div class="card"><div class="head"><h3>Share Regional (R$)</h3></div><div class="body"><div class="chartwrap"><canvas id="hpc_reg"></canvas></div></div></div>
-          <div class="card"><div class="head"><h3>Crescimento por Regional</h3></div><div class="body"><div class="chartwrap"><canvas id="hpc_cresc"></canvas></div></div></div>
-        </div>
-        <div class="sec-title">Top Fabricantes e Produtos — HPC · 74% das vendas nos Top 10</div>
-        <div class="grid g2" style="margin-top:8px">
-          <div class="card"><div class="head"><h3>Top 10 Fabricantes</h3></div><div class="body"><div class="chartwrap tall"><canvas id="hpc_fab"></canvas></div></div></div>
-          <div class="card"><div class="head"><h3>Top 10 Produtos</h3></div><div class="body"><div class="chartwrap tall"><canvas id="hpc_prod"></canvas></div></div></div>
-        </div>
-      </section>
-
-      <!-- ====== HOSPITALAR ====== -->
-      <section class="view" id="view-hospitalar">
-        <p class="sub">Performance empresa HOSPITALAR YTD maio 2025 vs 2026 · Canal recua -8% (R$ 57,2M → R$ 52,7M); RJ perde participação (68% → 46%) enquanto GO Contrato (+301%) e GO Rio (+100%) avançam</p>
-        <div class="grid g4">
-          <div class="kpi accent"><div class="lab">Faturamento YTD26</div><div class="val">R$ <span class="count" data-target="52.7" data-dec="1"></span>M</div><div class="delta neg">▼ -8%</div></div>
-          <div class="kpi"><div class="lab">Faturamento YTD25</div><div class="val">R$ <span class="count" data-target="57.2" data-dec="1"></span>M</div></div>
-          <div class="kpi"><div class="lab">GO Contrato</div><div class="val pos" style="color:var(--pos)">+301%</div></div>
-          <div class="kpi"><div class="lab">HOSP - RJ</div><div class="val" style="color:var(--neg)">-37%</div><div class="note">68% → 46% de share</div></div>
-        </div>
-        <div class="grid g2" style="margin-top:18px">
-          <div class="card"><div class="head"><h3>Comparativo de vendas — VD NF + POS</h3></div><div class="body"><div class="chartwrap"><canvas id="hosp_comp"></canvas></div></div></div>
-          <div class="card"><div class="head"><h3>Comparativo de vendas por mês — 2025 vs 2026</h3></div><div class="body"><div class="chartwrap"><canvas id="hosp_comp2"></canvas></div></div></div>
-          <div class="card"><div class="head"><h3>Crescimento por canal hospitalar</h3></div><div class="body"><div class="chartwrap"><canvas id="hosp_cresc"></canvas></div></div></div>
-          <div class="card"><div class="head"><h3>Share Empresa por canal hospitalar</h3></div><div class="body"><div class="chartwrap"><canvas id="hosp_share"></canvas></div></div></div>
-        </div>
-        <div class="sec-title">Top Fabricantes e Produtos — Hospitalar · Top 10 &gt; 82% das vendas</div>
-        <div class="grid g2" style="margin-top:8px">
-          <div class="card"><div class="head"><h3>Top 10 Fabricantes</h3></div><div class="body"><div class="chartwrap tall"><canvas id="hosp_fab"></canvas></div></div></div>
-          <div class="card"><div class="head"><h3>Top 10 Produtos</h3></div><div class="body"><div class="chartwrap tall"><canvas id="hosp_prod"></canvas></div></div></div>
-        </div>
-      </section>
-
-    </div>
-  </main>
+<div class="topbar" id="topbar">
+  <span class="brand">◉ Medicamental</span>
+  <button data-t="capa" class="on">Capa</button>
+  <button data-t="iqvia">IQVIA</button>
+  <button data-t="empresa">Empresa</button>
+  <button data-t="FARMA">FARMA</button>
+  <button data-t="OL">OL</button>
+  <button data-t="WEB">WEB</button>
+  <button data-t="B2LIST">B2LIST</button>
+  <button data-t="HPC">HPC</button>
+  <span class="themesw"><button id="tm-light" class="on">Light</button><button id="tm-dark">Dark</button></span>
 </div>
 
+<main>
+  <div class="tabpanel active" data-p="capa">
+    <div class="capa">
+      <svg class="capabg" viewBox="0 0 1200 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <g stroke="rgba(255,255,255,.045)" stroke-width="1">
+          <line x1="150" y1="0" x2="150" y2="500"/><line x1="300" y1="0" x2="300" y2="500"/><line x1="450" y1="0" x2="450" y2="500"/><line x1="600" y1="0" x2="600" y2="500"/><line x1="750" y1="0" x2="750" y2="500"/><line x1="900" y1="0" x2="900" y2="500"/><line x1="1050" y1="0" x2="1050" y2="500"/>
+          <line x1="0" y1="120" x2="1200" y2="120"/><line x1="0" y1="240" x2="1200" y2="240"/><line x1="0" y1="360" x2="1200" y2="360"/>
+        </g>
+        <g fill="#ffffff" opacity="0.05">
+          <rect x="70" y="360" width="34" height="140"/><rect x="150" y="330" width="34" height="170"/><rect x="230" y="300" width="34" height="200"/><rect x="310" y="330" width="34" height="170"/><rect x="470" y="280" width="34" height="220"/>
+        </g>
+        <polyline points="0,400 130,360 230,380 330,320 450,330 560,270 660,290 780,190 900,215 1020,130 1120,165 1200,80" fill="none" stroke="#5b9be0" stroke-width="3" opacity="0.55"/>
+        <g fill="#5b9be0" opacity="0.7">
+          <circle cx="130" cy="360" r="5"/><circle cx="330" cy="320" r="5"/><circle cx="560" cy="270" r="5"/><circle cx="780" cy="190" r="5"/><circle cx="1020" cy="130" r="5"/><circle cx="1200" cy="80" r="5"/>
+        </g>
+        <g stroke="#5b9be0" stroke-width="1.4" opacity="0.4" fill="none">
+          <line x1="1000" y1="70" x2="1090" y2="40"/><line x1="1090" y1="40" x2="1160" y2="95"/><line x1="1160" y1="95" x2="1060" y2="150"/><line x1="1060" y1="150" x2="1000" y2="70"/><line x1="1090" y1="40" x2="1060" y2="150"/>
+        </g>
+        <g fill="#7cb0e8" opacity="0.75">
+          <circle cx="1000" cy="70" r="5"/><circle cx="1090" cy="40" r="5"/><circle cx="1160" cy="95" r="5"/><circle cx="1060" cy="150" r="5"/>
+        </g>
+      </svg>
+      <div class="capactt">
+        <div class="logo">Medicamental</div>
+        <div class="pill">INTELIGÊNCIA DE MERCADO · ANÁLISE DE DADOS</div>
+        <div class="cdiv"></div>
+        <h1>Estudo de Performance</h1>
+        <p class="csub">Análise de vendas, canais, fabricantes e produtos</p>
+        <p class="ccaps">MÊS BASE JUNHO/2026 · PERFORMANCE YTD · JANEIRO A JUNHO 2026</p>
+        <div class="obs">⚠ Observação: este estudo <b>não contém</b> o centro de custo <b>Mesa de Negócios</b>.</div>
+        <button class="enter" id="goPanel">Acessar o painel →</button>
+      </div>
+      <div class="capafoot">Dados internos · Gerado a partir dos painéis Power BI</div>
+      <div class="capamarca">Victor Santos</div>
+    </div>
+  </div>
+
+  <div class="tabpanel" data-p="iqvia">
+    <h2 class="sec">IQVIA — Mercado (YTD PPP R$)</h2>
+    <p class="sub">Vendas do mercado e share do Grupo Medicamental. YTD 05/25 × 05/26.</p>
+    <div class="insight"><b>Insights</b><ul>
+      <li>Mercado cresceu +8,98% no YTD (R$ 3,55 bi → 3,86 bi).</li>
+      <li>Neo Química ganhou share Medicamental (17,18% → 20,26%); Eurofarma é o maior em R$.</li>
+      <li>Share total do grupo em 6,27%.</li></ul></div>
+    <div class="card">
+      <div class="kpis">
+        <div class="kpi"><div class="l">YTD 05/26</div><div class="v">R$ 3,86 bi</div></div>
+        <div class="kpi"><div class="l">YTD 05/25</div><div class="v">R$ 3,55 bi</div></div>
+        <div class="kpi"><div class="l">Cresc. mercado</div><div class="v htext">+8,98%</div></div>
+        <div class="kpi"><div class="l">Share Medicamental</div><div class="v">6,27%</div></div>
+        <div class="kpi"><div class="l">Cresc. Concorrentes</div><div class="v htext">+9,20%</div></div>
+        <div class="kpi"><div class="l">Cresc. Grupo Medicamental</div><div class="v htext">+5,88%</div></div>
+      </div>
+      <div class="htitle">Top 10 Mercado — laboratórios (Vendas PPP)</div>
+      <div class="barbox" id="cIqvia"></div>
+    </div>
+    <div class="card">
+      <div class="htitle">Top 10 Medicamental — melhores linhas (Vendas PPP e Share)</div>
+      <div class="barbox" id="cMed"></div>
+    </div>
+  </div>
+
+  <div class="tabpanel" data-p="empresa">
+    <h2 class="sec">Empresa — Performance Geral · YTD Junho (2025 × 2026)</h2>
+    <div class="tabgroup">
+      <div class="tabbar">
+        <button data-t="e_ytd" class="on">Performance</button>
+        <button data-t="e_cd">CD (Empresa)</button>
+        <button data-t="e_reg">Regional</button>
+        <button data-t="e_dev">Devolução</button>
+        <button data-t="e_fab">Top Fabricantes</button>
+        <button data-t="e_prod">Top Produtos</button>
+      </div>
+      <div class="tabpanel active" data-p="e_ytd"><div class="insight"><b>Insights</b><ul><li>Venda YTD −3,40% (R$ 257,1 mi → 248,3 mi) — base 2025 recalculada.</li><li>Maio recua −9,4%; Março levemente positivo (+0,5%).</li><li>POS recuou de 22.568 → 21.166 clientes.</li></ul></div><div class="card">
+        <div class="kpis"><div class="kpi"><div class="l">Venda 2026</div><div class="v">R$ 248,3 mi</div></div><div class="kpi"><div class="l">Venda 2025</div><div class="v">R$ 257,1 mi</div></div><div class="kpi"><div class="l">Variação</div><div class="v" style="color:var(--vermelho)">−3,40%</div></div><div class="kpi"><div class="l">POS 26/25</div><div class="v">21.166/22.568</div></div></div>
+        <div class="controls" data-ytd="GERAL"><button data-m="venda" class="on">Venda</button><button data-m="pos">POS</button><button data-m="vmd">VMD</button></div>
+        <div class="barbox" id="cYtd_GERAL"></div></div></div>
+      <div class="tabpanel" data-p="e_cd"><div class="insight"><b>Insights</b><ul><li>FARMA SP cresce +31,8% e vira o maior CD (R$ 114,0 mi).</li><li>FARMA GO recua −40,3%; FARMA ES sem operação relevante em 2026.</li><li>RJ e PR estáveis/positivos (+0,7% e +2,8%).</li></ul></div><div class="card"><div class="htitle">Venda por empresa (CD)</div><div class="barbox" id="cEmp"></div></div></div>
+      <div class="tabpanel" data-p="e_reg"><div class="insight"><b>Insights</b><ul><li>Rosa (GO/DF) +26,9% e Kris (RJ) +11,8% em alta; Alberto (Sul) +8,1%.</li><li>Grandes Contas despenca −71,0%; Lucilene (maior regional) −9,3%.</li></ul></div><div class="card"><div class="htitle">Venda por regional</div><div class="barbox" id="cReg"></div></div></div>
+      <div class="tabpanel" data-p="e_dev"><div class="insight"><b>Insights</b><ul><li>Devoluções pioraram no ano: Valor −R$ 5,9 mi → −R$ 8,5 mi.</li><li>Unidades −845 mil → −1,44 mi; Movimentos 7.747 → 10.178.</li><li>FARMA SP concentra a alta das devoluções.</li></ul></div><div class="card"><div class="htitle">Devolução por empresa</div>
+        <div class="controls" data-dev="DEV"><button data-m="valor" class="on">Valor (R$)</button><button data-m="qtd">Unidades (QTD)</button><button data-m="mov">Movimentos</button></div>
+        <div class="barbox" id="cDev"></div></div></div>
+      <div class="tabpanel" data-p="e_fab"><div class="insight"><b>Insights</b><ul><li>Hypera lidera e cresce +17,8% (share ~40% do faturamento).</li><li>Legrand −39,6% e Biolab −52,7% recuam forte; Sanchez Cano entra novo.</li></ul></div><div class="card"><div class="controls" data-tog="GERALfab"><button data-v="comp" class="on">25×26</button><button data-v="var">Var %</button></div><div class="barbox" id="cGERALfab"></div></div></div>
+      <div class="tabpanel" data-p="e_prod"><div class="insight"><b>Insights</b><ul><li>Losartana +84,8%, Nistatina +45,7% e Torsilax C/30 +45,0% puxam.</li><li>Expec XPE 120 recua −71,4%; Neosoro segue líder (+10,4%).</li></ul></div><div class="card"><div class="controls" data-tog="GERALprod"><button data-v="comp" class="on">25×26</button><button data-v="var">Var %</button></div><div class="barbox" id="cGERALprod"></div></div></div>
+    </div>
+  </div>
+
+  <div class="tabpanel" data-p="FARMA" id="panel-FARMA"></div>
+  <div class="tabpanel" data-p="OL" id="panel-OL"></div>
+  <div class="tabpanel" data-p="WEB" id="panel-WEB"></div>
+  <div class="tabpanel" data-p="B2LIST" id="panel-B2LIST"></div>
+  <div class="tabpanel" data-p="HPC" id="panel-HPC"></div>
+</main>
+
+<footer class="pagefoot">Victor Santos</footer>
+
 <script>
-Chart.register(ChartDataLabels);
-Chart.defaults.font.family="'Segoe UI',system-ui,Arial,sans-serif";
-Chart.defaults.font.size=11;
-Chart.defaults.color="#52627a";
-Chart.defaults.plugins.datalabels.color="#1f2a38";
-/* contorno/sombra para manter rótulos legíveis sobre qualquer fundo */
-Chart.defaults.plugins.datalabels.textStrokeColor="rgba(10,22,38,.65)";
-Chart.defaults.plugins.datalabels.textStrokeWidth=3;
-Chart.defaults.plugins.datalabels.textShadowColor="rgba(10,22,38,.45)";
-Chart.defaults.plugins.datalabels.textShadowBlur=4;
-Chart.defaults.plugins.tooltip.backgroundColor="#0e2138";
-Chart.defaults.plugins.tooltip.padding=10;
-Chart.defaults.plugins.tooltip.cornerRadius=8;
-Chart.defaults.plugins.tooltip.titleFont={weight:'700'};
+const pv=(a,b)=>b?((a-b)/b*100):100;
+function vcell(at,an){if(an==null||an<=0)return '<td>—</td>';const v=(at-an)/an*100,c=v>=0?'pn':'nn';return '<td class="'+c+'">'+(v>=0?'+':'')+v.toFixed(1)+'%</td>';}
+const brl=v=>(v<0?"-":"")+"R$ "+Math.abs(Math.round(v)).toLocaleString("pt-BR");
+const fmt=v=>Math.round(v).toLocaleString("pt-BR");
+const SPECS={},built=new Set();
 
-const CV=getComputedStyle(document.documentElement);
-const C={c1:'#2f6fb5',c2:'#ed7d31',c3:'#9aa7b4',c4:'#f5b800',c5:'#5b9bd5',c6:'#2bb673',
-  bar:'#3f7fd0',barlt:'#79b0e8',dgray:'#46586e',green:'#2bb673',orange:'#ed7d31'};
-const fmt=n=>Math.round(n).toLocaleString('pt-BR');
-const fmtR=n=>'R$ '+fmt(n);
+function tableHTML(labels,a,b,fmtFn){
+  let h='<table class="dt"><thead><tr><th>Item</th><th>2025</th><th>2026</th><th>Var.</th></tr></thead><tbody>';
+  for(let i=0;i<labels.length;i++){
+    h+='<tr><td>'+labels[i]+'</td><td>'+fmtFn(a[i])+'</td><td>'+fmtFn(b[i])+'</td>'+vcell(b[i],a[i])+'</tr>';}
+  return h+'</tbody></table>';
+}
+function tableFab(labels,a,b,total){
+  let h='<table class="dt"><thead><tr><th>Fabricante</th><th>2025</th><th>2026</th><th>Share</th><th>Var.</th></tr></thead><tbody>';
+  for(let i=0;i<labels.length;i++){const sh=total?(b[i]/total*100):0;
+    h+='<tr><td>'+labels[i]+'</td><td>'+brl(a[i])+'</td><td>'+brl(b[i])+'</td><td>'+sh.toFixed(1)+'%</td>'+vcell(b[i],a[i])+'</tr>';}
+  return h+'</tbody></table>';
+}
+function barsHTML(labels,a,b,fmtFn){
+  const max=Math.max(...a.map(Math.abs),...b.map(Math.abs),1);
+  let h='<div class="bclegend"><span><i class="g"></i>2025</span><span><i class="b"></i>2026</span></div><div class="bc">';
+  for(let i=0;i<labels.length;i++){
+    h+='<div class="bcrow"><div class="bclbl" title="'+labels[i]+'">'+labels[i]+'</div><div class="bcbars">'
+      +'<div class="bcbar"><div class="bcfill g" style="width:'+(Math.abs(a[i])/max*100)+'%"></div><span class="bcval">'+fmtFn(a[i])+'</span></div>'
+      +'<div class="bcbar"><div class="bcfill b" style="width:'+(Math.abs(b[i])/max*100)+'%"></div><span class="bcval">'+fmtFn(b[i])+'</span></div>'
+      +'</div></div>';
+  }
+  return h+'</div>';
+}
+function barsVarHTML(labels,a,b){
+  const vv=labels.map((l,i)=>(a[i]==null||a[i]<=0)?null:(b[i]-a[i])/a[i]*100),max=Math.max(...vv.map(x=>x==null?0:Math.abs(x)),1);
+  let h='<div class="bc">';
+  for(let i=0;i<labels.length;i++){const v=vv[i];
+    if(v==null){h+='<div class="bcrow"><div class="bclbl" title="'+labels[i]+'">'+labels[i]+'</div><div class="bcbar"><span class="bcval">—</span></div></div>';continue;}
+    const col=v>=0?'var(--verde)':'var(--vermelho)';
+    h+='<div class="bcrow"><div class="bclbl" title="'+labels[i]+'">'+labels[i]+'</div>'
+      +'<div class="bcbar"><div class="bcvar" style="width:'+(Math.abs(v)/max*100)+'%;background:'+col+'"></div>'
+      +'<span class="bcval" style="color:'+col+'">'+(v>=0?'+':'')+v.toFixed(1)+'%</span></div></div>';
+  }
+  return h+'</div>';
+}
+function barsGroup(id,labels,a,b,fmtFn){const el=document.getElementById(id);if(el)el.innerHTML=barsHTML(labels,a,b,fmtFn)+tableHTML(labels,a,b,fmtFn);}
+function barsSplit(id,labels,a,b,fmtFn){const el=document.getElementById(id);if(el)el.innerHTML='<div class="split"><div>'+tableHTML(labels,a,b,fmtFn)+'</div><div>'+barsHTML(labels,a,b,fmtFn)+'</div></div>';}
+function barsVar(id,labels,a,b){const el=document.getElementById(id);if(el)el.innerHTML=barsVarHTML(labels,a,b)+tableHTML(labels,a,b,brl);}
+function regTogFab(key,id,D,total){
+  SPECS[id]=()=>{const el=document.getElementById(id);if(el)el.innerHTML=barsHTML(D.labels,D.a,D.b,brl)+tableFab(D.labels,D.a,D.b,total);};
+  document.querySelectorAll('[data-tog="'+key+'"] button').forEach(btn=>btn.addEventListener('click',()=>{
+    document.querySelectorAll('[data-tog="'+key+'"] button').forEach(x=>x.classList.remove('on'));btn.classList.add('on');
+    const el=document.getElementById(id);if(!el)return;
+    el.innerHTML=(btn.dataset.v==='var'?barsVarHTML(D.labels,D.a,D.b):barsHTML(D.labels,D.a,D.b,brl))+tableFab(D.labels,D.a,D.b,total);}));}
+const fmtK=v=>{const s=v<0?'-':'';v=Math.abs(v);if(v>=1e6)return s+(v/1e6).toFixed(1).replace('.',',')+' mi';if(v>=1e3)return s+Math.round(v/1e3)+' mil';return s+Math.round(v);};
+function lineChart(id,labels,a,b,fmtFn){const el=document.getElementById(id);if(!el)return;
+  const W=720,H=260,pad=56,padT=16,padB=30,n=labels.length,all=a.concat(b);
+  let mn=Math.min(...all),mx=Math.max(...all);const p=(mx-mn)*0.18||mx*0.1||1;mn-=p;mx+=p;const rng=(mx-mn)||1;
+  const x=i=>pad+i*(W-pad-16)/(n-1),y=v=>padT+(H-padT-padB)*(1-(v-mn)/rng);
+  const serie=(arr,col)=>{const d=arr.map((v,i)=>(i?'L':'M')+x(i).toFixed(1)+' '+y(v).toFixed(1)).join(' ');
+    const pts=arr.map((v,i)=>'<circle cx="'+x(i).toFixed(1)+'" cy="'+y(v).toFixed(1)+'" r="3.6" fill="'+col+'"><title>'+fmtFn(v)+'</title></circle>').join('');
+    return '<path d="'+d+'" fill="none" stroke="'+col+'" stroke-width="2.6"/>'+pts;};
+  let grid='';for(let g=0;g<=4;g++){const yy=padT+(H-padT-padB)*g/4,val=mx-rng*g/4;
+    grid+='<line x1="'+pad+'" y1="'+yy.toFixed(1)+'" x2="'+(W-16)+'" y2="'+yy.toFixed(1)+'" stroke="#e6eaf0"/>'
+      +'<text x="'+(pad-6)+'" y="'+(yy+3).toFixed(1)+'" text-anchor="end" font-size="10" fill="#8593a3">'+fmtK(val)+'</text>';}
+  const xl=labels.map((l,i)=>'<text x="'+x(i).toFixed(1)+'" y="'+(H-10)+'" text-anchor="middle" font-size="11" fill="#5a6b7d">'+l+'</text>').join('');
+  el.innerHTML='<div class="split"><div>'+tableHTML(labels,a,b,fmtFn)+'</div>'
+    +'<div><div class="bclegend"><span><i class="g"></i>2025</span><span><i class="b"></i>2026</span></div>'
+    +'<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-width:760px;height:auto;display:block">'+grid+xl+serie(a,'#a9b7cc')+serie(b,'#2e5496')+'</svg></div></div>';
+}
+function regGroup(id,labels,a,b,fmtFn){SPECS[id]=()=>barsSplit(id,labels,a,b,fmtFn);}
+function regTog(key,id,D){const F=D.full||D.labels;
+  SPECS[id]=()=>{const el=document.getElementById(id);if(el)el.innerHTML=barsHTML(D.labels,D.a,D.b,brl)+tableHTML(F,D.a,D.b,brl);};
+  document.querySelectorAll('[data-tog="'+key+'"] button').forEach(btn=>btn.addEventListener('click',()=>{
+    document.querySelectorAll('[data-tog="'+key+'"] button').forEach(x=>x.classList.remove('on'));btn.classList.add('on');
+    const el=document.getElementById(id);if(!el)return;
+    el.innerHTML=(btn.dataset.v==='var'?barsVarHTML(D.labels,D.a,D.b):barsHTML(D.labels,D.a,D.b,brl))+tableHTML(F,D.a,D.b,brl);}));}
+function regYtd(key,Y){const id='cYtd_'+key,M=['Jan','Fev','Mar','Abr','Mai','Jun'];
+  SPECS[id]=()=>barsSplit(id,M,Y.venda.a,Y.venda.b,brl);
+  document.querySelectorAll('[data-ytd="'+key+'"] button').forEach(btn=>btn.addEventListener('click',()=>{
+    document.querySelectorAll('[data-ytd="'+key+'"] button').forEach(x=>x.classList.remove('on'));btn.classList.add('on');
+    const m=btn.dataset.m;
+    if(m==='vmd')lineChart(id,M,Y.vmd.a,Y.vmd.b,brl);
+    else barsSplit(id,M,Y[m].a,Y[m].b,m==='pos'?fmt:brl);}));}
+function regDev(key,D){const id='cDev';
+  SPECS[id]=()=>barsSplit(id,D.labels,D.valor.a,D.valor.b,brl);
+  document.querySelectorAll('[data-dev="'+key+'"] button').forEach(btn=>btn.addEventListener('click',()=>{
+    document.querySelectorAll('[data-dev="'+key+'"] button').forEach(x=>x.classList.remove('on'));btn.classList.add('on');
+    const m=btn.dataset.m;barsSplit(id,D.labels,D[m].a,D[m].b,m==='valor'?brl:fmt);}));}
+function renderVisible(){document.querySelectorAll('.barbox').forEach(el=>{
+  if(el.offsetParent!==null&&SPECS[el.id]&&!built.has(el.id)){SPECS[el.id]();built.add(el.id);}});}
 
-/* ---------- chart builders ---------- */
-function compChart(id,vd,pos,delta){
-  return new Chart(document.getElementById(id),{type:'bar',
-    data:{labels:['YTD 2025','YTD 2026'],datasets:[
-      {label:'VD NF',data:vd,backgroundColor:C.bar,borderRadius:6,maxBarThickness:90,
-        datalabels:{color:'#fff',font:{weight:'bold',size:12},formatter:v=>fmt(v)}},
-      {label:'POS',data:pos,backgroundColor:C.orange,borderRadius:6,maxBarThickness:90,
-        datalabels:{color:'#fff',font:{weight:'bold',size:10},formatter:v=>fmt(v)}}
-    ]},
-    options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{position:'top',labels:{usePointStyle:true,boxWidth:8}},
-        title:{display:!!delta,text:delta,color:delta&&delta.includes('+')?C.green:'#e23b3b',font:{size:15,weight:'bold'}},
-        tooltip:{callbacks:{label:c=>c.dataset.label+': '+fmtR(c.raw)}}},
-      scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:'#eef2f7'},ticks:{callback:v=>fmt(v)}}}}});
-}
-function shareChart(id,labels,colors,d25,d26,totals){
-  // maior fatia no topo, menor na base (ordenado por YTD26)
-  const o=labels.map((_,i)=>i).sort((a,b)=>d26[a]-d26[b]);
-  labels=o.map(i=>labels[i]);colors=o.map(i=>colors[i]);d25=o.map(i=>d25[i]);d26=o.map(i=>d26[i]);
-  const ds=labels.map((l,i)=>({label:l,data:[d25[i],d26[i]],backgroundColor:colors[i],borderRadius:3,maxBarThickness:80,
-    datalabels:{color:'#fff',font:{weight:'bold',size:10},formatter:v=>v>=3?v+'%':''}}));
-  return new Chart(document.getElementById(id),{type:'bar',data:{labels:['YTD 2025','YTD 2026'],datasets:ds},
-    options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{position:'bottom',reverse:true,labels:{boxWidth:10,font:{size:10},padding:8}},
-        tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.raw+'%'}}},
-      scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,max:100,grid:{color:'#eef2f7'},ticks:{callback:v=>v+'%'}}}}});
-}
-function growthChart(id,labels,vals){
-  const o=labels.map((_,i)=>i).sort((a,b)=>vals[b]-vals[a]); // maior no topo
-  labels=o.map(i=>labels[i]); vals=o.map(i=>vals[i]);
-  return new Chart(document.getElementById(id),{type:'bar',
-    data:{labels:labels,datasets:[{data:vals,borderRadius:5,maxBarThickness:30,
-      backgroundColor:vals.map(v=>v>=0?C.bar:'#e07b7b'),
-      datalabels:{color:'#1f2a38',anchor:'end',align:'end',clamp:true,font:{weight:'bold',size:11},textStrokeWidth:0,textShadowBlur:0,formatter:v=>v+'%'}}]},
-    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:{right:38,left:38}},
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw+'%'}}},
-      scales:{x:{grid:{color:'#eef2f7'},ticks:{callback:v=>v+'%'}},y:{grid:{display:false},ticks:{font:{size:10}}}}}});
-}
-function comboChart(id,labels,bars,line,barColor){
-  const o=labels.map((_,i)=>i).sort((a,b)=>bars[b]-bars[a]); // maior no topo
-  labels=o.map(i=>labels[i]); bars=o.map(i=>bars[i]); if(line)line=o.map(i=>line[i]);
-  return new Chart(document.getElementById(id),{type:'bar',
-    data:{labels:labels,datasets:[{label:'YTD26 R$',data:bars,backgroundColor:barColor,borderRadius:4,maxBarThickness:26,
-      datalabels:{anchor:'end',align:'end',color:'#1f2a38',font:{size:9,weight:'bold'},textStrokeWidth:0,textShadowBlur:0,
-        formatter:(v,ctx)=>{const g=line?line[ctx.dataIndex]:null;return g==null?fmt(v):fmt(v)+'   '+(g>=0?'+':'')+g+'%';}}}]},
-    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:{right:96}},
-      plugins:{legend:{display:false},
-        tooltip:{callbacks:{label:c=>{const g=line?line[c.dataIndex]:null;return 'YTD26: '+fmtR(c.raw)+(g==null?'':'  ·  Cresc. '+(g>=0?'+':'')+g+'%');}}}},
-      scales:{x:{grid:{color:'#eef2f7'},ticks:{callback:v=>fmt(v)}},y:{grid:{display:false},ticks:{font:{size:9.5}}}}}});
-}
-function vmdChart(id,labels,d25,d26,note){
-  const ds=[];
-  if(d26)ds.push({label:'2026',data:d26,borderColor:C.orange,backgroundColor:'rgba(237,125,49,.08)',fill:true,tension:.35,pointRadius:3,
-    datalabels:{align:'top',color:C.orange,font:{size:9,weight:'bold'},textStrokeColor:'#fff',textStrokeWidth:3,textShadowBlur:0,formatter:v=>fmt(v)}});
-  if(d25)ds.push({label:'2025',data:d25,borderColor:C.c5,backgroundColor:'transparent',tension:.35,pointRadius:3,
-    datalabels:{align:'bottom',color:C.c5,font:{size:9,weight:'bold'},textStrokeColor:'#fff',textStrokeWidth:3,textShadowBlur:0,formatter:v=>fmt(v)}});
-  return new Chart(document.getElementById(id),{type:'line',data:{labels:labels,datasets:ds},
-    options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:18}},
-      plugins:{legend:{position:'top',labels:{usePointStyle:true,boxWidth:8}},
-        title:{display:!!note,text:note,color:C.green,font:{size:14,weight:'bold'}},
-        tooltip:{callbacks:{label:c=>c.dataset.label+': '+fmtR(c.raw)}}},
-      scales:{x:{grid:{display:false}},y:{grid:{color:'#eef2f7'},ticks:{callback:v=>fmt(v)}}}}});
-}
+/* GERAL */
+SPECS['cIqvia']=()=>sharePanel('cIqvia',['EUROFARMA','NEO QUIMICA','MEDLEY','LEGRAND','TEUTO','MERCK','DANONE','BIOLAB-SANUS','EMS','ACHE'],
+  [570515834,426103645,155308652,174541300,170440179,149216801,91511057,118669455,133143269,107710988],
+  [633559200,495976756,195883873,167880313,172179068,163124808,145961827,144675747,144131719,131546214],
+  [6.00,17.18,null,7.39,2.22,0.36,null,7.16,2.69,4.37],[5.64,20.26,0.85,5.26,0.50,0.03,0.25,3.30,0.93,1.75]);
+function sharePanel(id,L,a,b,s25,s26){const el=document.getElementById(id);if(!el)return;
+  const p=x=>x==null?'—':x.toFixed(2).replace('.',',')+'%';
+  let t='<table class="dt"><thead><tr><th>Laboratório</th><th>Vendas 25</th><th>Share 25</th><th>Vendas 26</th><th>Share 26</th><th>Var. Share</th><th>Var.</th></tr></thead><tbody>';
+  for(let i=0;i<L.length;i++){
+    const dsh=(s25[i]==null||s26[i]==null)?null:(s26[i]-s25[i]),dcls=dsh==null?'':(dsh>=0?'pn':'nn'),
+      dtxt=dsh==null?'—':(dsh>=0?'+':'')+dsh.toFixed(2).replace('.',',')+' p.p.';
+    t+='<tr><td>'+L[i]+'</td><td>'+brl(a[i])+'</td><td>'+p(s25[i])+'</td><td>'+brl(b[i])+'</td><td>'+p(s26[i])+'</td><td class="'+dcls+'">'+dtxt+'</td>'+vcell(b[i],a[i])+'</tr>';}
+  t+='</tbody></table>';
+  el.innerHTML='<div class="split"><div>'+t+'</div><div>'+barsHTML(L,a,b,brl)+'</div></div>';}
+SPECS['cMed']=()=>sharePanel('cMed',['EUROFARMA','NEO QUIMICA','LEGRAND PHARMA','BIOLAB-SANUS','GEOLAB','SANDOZ','NATULAB','PHARLAB','CELLERA','FINI'],
+  [570515834,426103645,174541300,118669455,119215552,100197782,61139838,54695417,21423694,2756156],
+  [633559200,495976756,167880313,144675747,120725095,105531266,63620561,54943066,20659983,8978887],
+  [6.00,17.18,7.39,7.16,7.01,11.36,8.92,9.96,11.48,null],[5.64,20.26,5.26,3.30,7.33,10.80,5.93,10.22,17.96,32.21]);
+regGroup('cEmp',['FARMA SP','FARMA GO','FARMA RJ','FARMA PR','FARMA DF','FARMA ES'],
+  [86472642,92499569,37795321,32452711,7869400,-8532],[113985078,55204271,38046454,33356705,7742029,4190],brl);
+regGroup('cReg',['LUCILENE','ROSA','KRIS','ALBERTO','GR. CONTAS','JOSEANE'],
+  [130545324,36109466,32545406,32004415,18176115,7700386],[118358353,45820509,36398956,34607278,5274405,7879224],brl);
+regDev('DEV',{labels:['FARMA SP','FARMA GO','FARMA RJ','FARMA PR','FARMA DF','FARMA ES'],
+  valor:{a:[-2644223,-2009763,-670853,-360157,-180610,-13644],b:[-4964962,-2178738,-763864,-443938,-140554,-9185]},
+  qtd:{a:[-341956,-328799,-103386,-53112,-16970,-40332],b:[-940772,-336481,-87849,-66849,-11594,-29542]},
+  mov:{a:[3537,1900,990,1124,197,64],b:[5449,1867,1065,1670,163,63]}});
+regYtd('GERAL',{venda:{a:[43138940,38581693,44706860,38476110,49262130,42915380],b:[41077869,35662033,44933157,38643465,44625996,43396206]},
+  pos:{a:[16177,15523,15985,15444,16738,16234],b:[15704,15426,16070,15648,15784,15865]},
+  vmd:{a:[1960861,1929085,2352993,1923806,2345816,2258704],b:[1956089,1981224,2042416,1932173,2231300,2066486]}});
+regTogFab('GERALfab','cGERALfab',{labels:['HYPERA','EUROFARMA','SANDOZ','GEOLAB','LEGRAND','PHARLAB','BIOLAB','NATULAB','SANCHEZ CANO','CELLERA'],
+  a:[83417923,35588244,12752174,9271020,15787879,7253623,9722566,5555462,0,2747942],b:[98283552,33221081,12133947,9834118,9536142,6365832,4604295,4348177,4032949,3771149]},248338726);
+regTog('GERALprod','cGERALprod',{labels:['NEOSORO','TORSILAX C/30','NISTATINA+OX ZN','LOSARTANA 50','DIPIRONA 01GR','DIPIRONA ABACAXI','DORALGINA','NAPROXENO 550','EXPEC XPE 120','TORSILAX C/12'],full:['NEOSORO ADT SOL NASAL 30 ML - NEOQ (S)','TORSILAX C/30 CPR - NEOQ (S)','NISTATINA+OXIDO DE ZINCO POM 60 GRS - NEOQ (G)','LOSARTANA 50MG C/30 CPR - NEOQ (G)','DIPIRONA SODICA 01 GR C/10 CPR - NEOQ (G)','DIPIRONA SODICA ABACAXI FR PL 20ML - NEOQ (G)','DORALGINA C/20 CPR - NEOQ (S)','NAPROXENO 550MG C/10 CPR - NEOQ (S)','EXPEC XPE 120 ML - LEGRAND','TORSILAX C/12 CPR - NEOQ (S)'],
+  a:[9847965,6572206,5522461,3697067,5430602,3160252,2538096,2434727,8424373,1616064],b:[10874464,9528212,8048474,6832006,6328367,2908257,2818724,2745898,2409928,2287489]});
 
-/* ---------- bar + line (dois eixos) — comparativo devolução ---------- */
-function devChart(id,labels,bars,line,barColor){
-  const bmax=Math.max(0,...bars),bmin=Math.min(0,...bars);
-  const lmax=Math.max(...line),lmin=Math.min(...line);
-  const pad=(v,f)=>v===0?0:v*f;
-  return new Chart(document.getElementById(id),{
-    data:{labels:labels,datasets:[
-      {type:'bar',label:'YTD26RS - MILHÕES',data:bars,yAxisID:'y',backgroundColor:barColor,borderRadius:4,maxBarThickness:46,order:2,
-        datalabels:{anchor:'end',align:ctx=>bars[ctx.dataIndex]>=0?'top':'bottom',clamp:true,color:'#1f2a38',font:{size:9.5,weight:'bold'},textStrokeColor:'#fff',textStrokeWidth:3,textShadowBlur:0,formatter:v=>fmt(v)}},
-      {type:'line',label:'CRESC. YTD25 vs YTD26 %',data:line,yAxisID:'y1',order:1,
-        borderColor:C.dgray,borderWidth:2,tension:.3,pointRadius:4,pointHoverRadius:6,
-        pointBackgroundColor:c=>line[c.dataIndex]>=0?C.green:'#e23b3b',pointBorderColor:'#fff',pointBorderWidth:1.5,
-        datalabels:{anchor:'end',align:'top',clamp:true,color:c=>line[c.dataIndex]>=0?C.green:'#e23b3b',font:{size:10,weight:'bold'},
-          textStrokeColor:'#fff',textStrokeWidth:3,textShadowBlur:0,formatter:v=>(v>=0?'+':'')+v+'%'}}
-    ]},
-    options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:18,bottom:4}},
-      plugins:{legend:{position:'bottom',labels:{usePointStyle:true,boxWidth:8,padding:14}},
-        tooltip:{callbacks:{label:c=>c.dataset.type==='line'?'Cresc.: '+(c.raw>=0?'+':'')+c.raw+'%':'YTD26: '+fmt(c.raw)}}},
-      scales:{x:{grid:{display:false},ticks:{font:{size:9.5}}},
-        y:{grid:{color:'#eef2f7'},suggestedMax:pad(bmax,1.25),suggestedMin:pad(bmin,1.25),ticks:{callback:v=>fmt(v)}},
-        y1:{position:'right',grid:{drawOnChartArea:false},suggestedMax:pad(lmax,1.3),suggestedMin:pad(lmin,1.3),ticks:{callback:v=>v+'%'}}}}});
-}
-
-/* ---------- data: O.L regional ---------- */
-const OL={
- lucilene:{t:'LUCILENE',l:['HYPERA S.A.','EUROFARMA LAB','SANDOZ BRASIL','BIOLAB FARMA','HERBAMED LAB','NATULAB LAB','PHARLAB IND','ACHE LAB FARM','LANSINOH','GEOLAB IND'],
-   b:[16058342,11867088,5367826,1220268,944671,473971,407833,383119,266785,160013],g:[-2,-32,-8,-67,100,-20,-47,-73,100,-67]},
- rosa:{t:'ROSA',l:['EUROFARMA LAB','SANDOZ BRASIL','HYPERA S.A.','BIOLAB FARMA','GEOLAB IND','DOMINA FARMA','MEDQUIMICA','VITAMEDIC IND','SANFARMA IND','EMS S.A'],
-   b:[4320732,709716,363334,143413,48622,7105,1757,383,165,0],g:[48,33,-46,-89,105,-39,100,-100,100,-100]},
- kris:{t:'KRIS',l:['EUROFARMA LAB','SANDOZ BRASIL','HYPERA S.A.','BIOLAB FARMA','HERBAMED LAB','NUTRIN GROUP','GEOLAB IND','VITAMEDIC IND','SANFARMA IND','ALMEIDA PRADO'],
-   b:[1091747,614044,338756,245476,225389,45384,32587,19196,543,0],g:[310,-16,93,-40,100,100,2,-94,100,-100]},
- alberto:{t:'ALBERTO',l:['HYPERA S.A.','BIOLAB FARMA','EUROFARMA LAB','NATULAB LAB','LANSINOH','GEOLAB IND','NUTRIN GROUP','AIRELA IND','ALTHAIA S.A.','DOMINA FARMA'],
-   b:[830249,490908,415433,127486,19525,10323,7129,1495,0,0],g:[-32,69,85,-35,100,111,100,100,-100,-100]},
- gc:{t:'GRANDES CONTAS',l:['HYPERA S.A.','EUROFARMA LAB','SANDOZ BRASIL','HERBAMED LAB','BIOLAB FARMA','GEOLAB IND','NUTRIN GROUP','NATULAB LAB','PHARLAB IND','VITAMEDIC IND'],
-   b:[450064,155819,137544,46404,18995,15024,11927,10243,8961,6299],g:[-19,-56,39,100,-91,-74,-55,-93,-83,-94]},
- joseane:{t:'JOSEANE',l:['HYPERA S.A.','EUROFARMA LAB','SANDOZ BRASIL','HERBAMED LAB','BIOLAB FARMA','PHARLAB IND','NATULAB LAB','ACHE LAB FARM','DOMINA FARMA','NUTRIEX'],
-   b:[674922,385212,192330,106548,31327,19586,14751,10194,4476,2382],g:[1,-17,100,100,-86,-20,135,-64,-46,206]}
-};
-let olChart=null;
-function renderOL(key){
-  const d=OL[key];document.getElementById('olRegTitle').textContent=d.t;
-  if(olChart)olChart.destroy();
-  olChart=comboChart('ol_regional',d.l,d.b,d.g,C.bar);
-}
-
-/* ---------- IQVIA table ---------- */
-const IQVIA=[
- ['EUROFARMA','453.616.754,10','5,74%','502.280.571,32','4,95%'],
- ['NEO QUIMICA','327.883.654,44','16,95%','390.174.849,94','20,56%'],
- ['LEGRAND PHARMA','128.699.081,79','7,31%','130.637.036,04','5,53%'],
- ['BIOLAB-SANUS FARMA','93.137.413,65','7,09%','115.569.986,83','3,73%'],
- ['GEOLAB','88.045.692,06','7,47%','94.777.375,32','7,02%'],
- ['SANDOZ','76.592.330,18','11,62%','83.110.725,39','11,72%'],
- ['NATULAB','47.189.817,80','10,96%','49.680.081,94','5,56%'],
- ['PHARLAB','41.442.045,06','10,10%','43.337.202,46','10,29%'],
- ['MULTILAB','38.455.598,41','6,07%','41.947.553,97','7,61%'],
- ['CELLERA FARMA','17.004.984,31','11,18%','16.724.841,01','17,43%'],
- ['Total','1.312.067.371,80','9,66%','1.468.240.224,11','9,97%']
+/* CANAIS */
+const CANAIS=[
+ {id:'FARMA',nome:'FARMA',v25:164480648,v26:165293642,pos25:18645,pos26:18219,varTxt:'+0,49%',varCls:'pos',
+  ytd:{venda:{a:[30192059,25024946,28163464,23033036,30997982,27069161],b:[26895056,24551944,29463139,26659598,29181401,28542504]},pos:{a:[12736,11725,11911,11323,12384,11991],b:[12063,11800,12302,12142,12339,12331]},vmd:{a:[1372366,1251247,1482288,1151652,1476094,1424693],b:[1280717,1363997,1339234,1332980,1459070,1359167]}},
+  fab:{labels:['HYPERA','EUROFARMA','LEGRAND','GEOLAB','PHARLAB','SANCHEZ CANO','MULTILAB','SANDOZ','CELLERA','NATULAB'],a:[56926730,8966688,14779502,7749158,5478980,0,3311664,3764324,2533243,4371188],b:[70769916,8913320,8167413,8054949,5126326,3776208,3716808,3540016,3117975,2995442]},
+  prod:{labels:['NEOSORO','TORSILAX C/30','LOSARTANA 50','NISTATINA+OX ZN','DIPIRONA 01GR','DIPIRONA ABACAXI','EXPEC XPE 120','DORALGINA','ENXAK (CAZI)','NAPROXENO 550'],full:['NEOSORO ADT SOL NASAL 30 ML - NEOQ (S)','TORSILAX C/30 CPR - NEOQ (S)','LOSARTANA 50MG C/30 CPR - NEOQ (G)','NISTATINA+OXIDO DE ZINCO POM 60 GRS - NEOQ (G)','DIPIRONA SODICA 01 GR C/10 CPR - NEOQ (G)','DIPIRONA SODICA ABACAXI FR PL 20ML - NEOQ (G)','EXPEC XPE 120 ML - LEGRAND','DORALGINA C/20 CPR - NEOQ (S)','ENXAK C/12 CPR - CAZI','NAPROXENO 550MG C/10 CPR - NEOQ (G)'],a:[7692446,5132695,2542155,3445232,3124749,2128673,8088538,1465958,1149744,1476681],b:[8928848,6465975,5514660,5439550,3649673,2360967,2123602,1837438,1835127,1797803]},
+  emp:{labels:['FARMA DF','FARMA ES','FARMA GO','FARMA PR','FARMA RJ','FARMA SP'],a:[6199282,-8532,58422659,26230824,31900069,41736347],b:[5852977,4190,40958404,26262906,30714176,61500988]},
+  reg:{labels:['LUCILENE','ROSA','KRIS','ALBERTO','GR. CONTAS','JOSEANE'],a:[64621200,27616058,27642356,26277512,14947738,3375784],b:[64618894,34936281,29342655,27980874,4560954,3253984]}},
+ {id:'OL',nome:'OL',v25:81000413,v26:61906844,pos25:13722,pos26:10685,varTxt:'−23,57%',varCls:'neg',
+  ytd:{venda:{a:[11111006,11654884,14728941,13820128,16017073,13668380],b:[11160492,8330590,11639787,8096288,11801910,10877778]},pos:{a:[6932,7245,7297,6318,7591,6786],b:[6101,5283,5768,4837,5904,4887]},vmd:{a:[505046,582744,775207,691006,800854,719388],b:[531452,462811,529081,404814,590096,517989]}},
+  fab:{labels:['EUROFARMA','HYPERA','SANDOZ','BIOLAB','HERBAMED','NATULAB','ACHE','PHARLAB','CIFARMA','LANSINOH'],a:[25833799,24462670,8740413,7120190,0,923279,1681745,1406194,7551767,0],b:[22962041,22632817,8194700,2228769,1588641,725055,568404,509371,493146,403559]},
+  prod:{labels:['TORSILAX C/30','DIPIRONA 01GR','NISTATINA+OX ZN','DAPAGLIFLOZINA','NEOSORO','LOSARTANA 50','SINVASTATINA 20','NAPROXENO 550','DORALGINA','ROSUVASTATINA 20'],full:['TORSILAX C/30 CPR - NEOQ (S)','DIPIRONA SODICA 01 GR C/10 CPR - NEOQ (G)','NISTATINA+OXIDO DE ZINCO POM 60 GRS - NEOQ (G)','DAPAGLIFLOZINA 10MG C/30 CPR - EURO (G)','NEOSORO ADT SOL NASAL 30 ML - NEOQ (S)','LOSARTANA 50MG C/30 CPR - NEOQ (G)','SINVASTATINA 20MG C/30 CPR - SANDOZ (G)','NAPROXENO 550MG C/10 CPR - NEOQ (G)','DORALGINA C/20 CPR - NEOQ (S)','ROSUVASTATINA 20MG C/30 CPR - SANDOZ (G)'],a:[1366837,2277211,2059239,0,1980986,1131033,1051165,939726,1035087,867016],b:[2820434,2588494,2489938,1676955,1668895,1217777,930582,876833,844164,736639]},
+  emp:{labels:['FARMA DF','FARMA GO','FARMA PR','FARMA RJ','FARMA SP'],a:[1529076,31251342,4174578,3219921,40825496],b:[1543188,9877917,2211369,2993370,45275201]},
+  reg:{labels:['LUCILENE','ROSA','KRIS','ALBERTO','GR. CONTAS','JOSEANE'],a:[61397462,7409668,2832243,4043445,2532102,2785494],b:[46811282,7368033,2843302,2201104,640190,2042933]},
+  subs:[
+    {id:'LUC',nome:'Lucilene · SPI/SPC',tot:46811282,fab:{labels:['HYPERA','EUROFARMA','SANDOZ','BIOLAB','HERBAMED','ACHE','NATULAB','PHARLAB'],a:[20233064,20434262,7029709,4236660,0,1613602,570328,1164055],b:[19768386,14780717,6257835,1284022,1157520,554430,532542,479093]}},
+    {id:'ROS',nome:'Rosa · GO/DF',tot:7368033,fab:{labels:['EUROFARMA','SANDOZ','HYPERA','BIOLAB','GEOLAB','CIFARMA','SANFARMA','VITAMEDIC'],a:[3765836,594444,884581,1427098,21802,270427,988,369225],b:[5886724,817815,409371,143672,50604,49882,521,383]}},
+    {id:'KRI',nome:'Kris · RJ',tot:2843302,fab:{labels:['EUROFARMA','SANDOZ','HYPERA','BIOLAB','HERBAMED','NUTRIN','GEOLAB','VITAMEDIC'],a:[280738,747929,282441,452278,0,0,22069,375037],b:[1166182,714851,362471,254970,244433,45384,32132,20841]}},
+    {id:'ALB',nome:'Alberto · Sul',tot:2201104,fab:{labels:['HYPERA','BIOLAB','EUROFARMA','NATULAB','LANSINOH','CIFARMA','GEOLAB','NUTRIN'],a:[1484694,467378,234981,197328,0,1320285,4964,0],b:[995457,493735,463856,141212,47820,39412,10989,7129]}},
+    {id:'JOS',nome:'Joseane · TLV/OL',tot:2042933,fab:{labels:['HYPERA','EUROFARMA','SANDOZ','HERBAMED','CIFARMA','BIOLAB','PHARLAB','NATULAB'],a:[938499,582713,228770,0,533364,251474,50924,6057],b:[853521,558254,272222,146911,63594,32140,21433,16464]}}
+  ]},
+ {id:'WEB',nome:'WEB',v25:10794422,v26:20723085,pos25:3744,pos26:4897,varTxt:'+91,98%',varCls:'pos',
+  ytd:{venda:{a:[1665862,1641014,1735023,1574969,2183797,1993757],b:[2946614,2755220,3683443,3818244,3618074,3901490]},pos:{a:[1773,1783,1884,1804,2208,2219],b:[2841,2813,3086,3124,3018,3147]},vmd:{a:[75721,82051,91317,78748,103990,104935],b:[140315,153068,167429,190912,180904,185785]}},
+  fab:{labels:['HYPERA','GEOLAB','EUROFARMA','LEGRAND','PHARLAB','MULTILAB','NATULAB','ZYDUS','VITAMEDIC','CELLERA'],a:[1800903,823289,742500,783489,363508,320335,240142,155146,332904,180027],b:[4760070,1429552,1327375,1302430,718023,713035,619206,447448,442340,408673]},
+  prod:{labels:['EXPEC XPE 120','ENXAK (CAZI)','NEOSORO','TORSILAX C/30','FOSFOMICINA','NEOGERMINA 2BI','DORALGINA','REPOFLOR','DUTAST+TANSU','NATUS GERIN'],full:['EXPEC XPE 120 ML - LEGRAND','ENXAK C/12 CPR - CAZI','NEOSORO ADT SOL NASAL 30 ML - NEOQ (S)','TORSILAX C/30 CPR - NEOQ (S)','FOSFOMICINA TROMETAMOL 5,631G C/01 ENV - PHARMASCIENCE','NEOGERMINA 2BI C/10 FLAC 5 ML - NEOQ (S)','DORALGINA C/20 CPR - NEOQ (S)','REPOFLOR 200MG C/06 CPS - LEGRAND','DUTASTERIDA+TANSULOSINA 0,5+0,4MG C/30 CPS - ZYDUS','NATUS GERIN C/50 CPS - LEGRAND (S)'],a:[285971,15207,122141,63993,0,44521,36031,56266,0,39404],b:[250536,237625,237071,236842,179053,148390,135032,133871,123277,106162]},
+  emp:{labels:['FARMA DF','FARMA GO','FARMA PR','FARMA RJ','FARMA SP'],a:[140911,2588767,2015343,2616920,3432481],b:[343978,4239264,4840728,4211414,7087701]},
+  reg:{labels:['LUCILENE','ROSA','KRIS','ALBERTO','GR. CONTAS','JOSEANE'],a:[3890716,1022285,2024950,1653084,675230,1528159],b:[6809551,3386155,3496163,4384870,68274,2578073]}},
+ {id:'B2LIST',nome:'B2LIST',v25:306867,v26:415155,pos25:687,pos26:857,varTxt:'+35,29%',varCls:'pos',
+  ytd:{venda:{a:[0,8768,29089,28217,57490,183304],b:[75708,24279,146788,69336,24610,74434]},pos:{a:[0,15,71,101,170,450],b:[228,72,318,241,89,176]},vmd:{a:[0,2192,2424,2015,3593,10184],b:[4453,2207,7726,4079,1641,3544]}},
+  fab:{labels:['HYPERA','LEGRAND','GEOLAB','EUROFARMA','PHARMASCIENCE','G-TECH','PHARLAB','ZYDUS','MULTILAB','ACHE'],a:[124689,16045,12067,5479,1461,8314,4941,151,3984,5413],b:[120750,71737,25168,18344,16795,13665,12112,11499,10374,9905]},
+  prod:{labels:['NEOSORO','EXPEC XPE 120','NATUS GERIN','METOPROLOL 25','NISTATINA+OX ZN','LOSARTANA 50','DUTAST+TANSU','REPOFLOR','FOSFOMICINA','AMOX UNICHEM'],full:['NEOSORO ADT SOL NASAL 30 ML - NEOQ (S)','EXPEC XPE 120 ML - LEGRAND','NATUS GERIN C/50 CPS - LEGRAND (S)','METOPROLOL 25MG C/30 CPR - NEOQ (G)','NISTATINA+OXIDO DE ZINCO POM 60 GRS - NEOQ (G)','LOSARTANA 50MG C/30 CPR - NEOQ (G)','DUTASTERIDA+TANSULOSINA 0,5+0,4MG C/30 CPS - ZYDUS','REPOFLOR 200MG C/06 CPS - LEGRAND','FOSFOMICINA TROMETAMOL 5,631G C/01 ENV - PHARMASCIENCE','AMOXICILINA 500MG C/21 CPR - UNICHEM'],a:[35911,13801,1111,0,647,2673,0,148,0,8824],b:[39272,35791,18451,17532,14340,12311,10333,8004,7963,7535]},
+  emp:{labels:['FARMA DF','FARMA GO','FARMA PR','FARMA RJ','FARMA SP'],a:[131,64712,31581,58411,152032],b:[1885,128686,41702,121694,121188]},
+  reg:{labels:['LUCILENE','ROSA','KRIS','ALBERTO','GR. CONTAS','JOSEANE'],a:[139555,61456,45822,29990,20246,9798],b:[118627,130040,117924,40428,3901,4236]}},
+ {id:'HPC',nome:'HPC',v25:13491295,v26:28919230,pos25:15221,pos26:17314,varTxt:'+114,36%',varCls:'pos',
+  ytd:{venda:{a:[2074824,1968973,2043660,2066390,2875234,2462213],b:[3924707,3975051,4661238,4822524,5772777,5762934]},pos:{a:[7809,7368,7541,7163,8287,7816],b:[9421,9510,10159,10284,10822,10819]},vmd:{a:[94310,98449,107561,103320,136916,129590],b:[186891,220836,211874,241126,288639,274425]}},
+  fab:{labels:['SANCHEZ CANO','G-TECH','KATIGUA','HERBAMED','NUTRIN','ARTE NATIVA','BIO INSTINTO','FARMAX','PONTELAND','MAXINUTRI'],a:[0,454490,1887683,0,1327953,1813531,0,2139303,0,0],b:[4032949,3339620,2687379,2619822,2551891,1968546,1395362,1184677,907621,867380]},
+  prod:{labels:['FINI MELAT 60G','FINI MELAT 120G','INALADOR G-TECH DC1','OMEGA 3 KATIGUA','POMADA FISIOFORT','AP PRESSAO GP400','POMADA LANSINOH','TIRAS MEDLEVENSOHN','KIT KATIGUA OMEGA3','SAYA CONTROL DKT'],full:['FINI DR GOOD MELATONINA 60GOMAS - FINI','FINI DR GOOD MELATONINA 120GOMAS - FINI','INALADOR NEBULIZAD G-TECH COMPACT DC1 - G-TECH','OMEGA 3 KATIGUA TRIPLA FONTE 1000MG 120 - KATIGUA','POMADA MASSAG FISIOFORT PREMIUM 150G - BIO INSTINTO','AP PRESSAO G-TECH DIG AUTO PULSO GP400 - G-TECH','POMADA LANOLINA LANSINOH HPA 30G - LANSINOH','TIRAS GLIC ON CALL PLUS II 50UN - MEDLEVENSOHN','KIT KATIGUA OMEGA 3 DHA+EPA+ALA 3X120CA - KATIGUA','SAYA CONTROL DKT 1,5MG PREV GRAVID 1CP - PRUDENCE'],a:[0,0,246529,714391,0,14443,0,50030,0,149639],b:[1806613,1344977,870987,667039,653591,572617,530724,392534,378803,372776]},
+  emp:{labels:['FARMA DF','FARMA ES','FARMA GO','FARMA PR','FARMA RJ','FARMA SP'],a:[558469,994,4053410,1427923,2487715,4961469],b:[995265,1009,6074339,5011272,8866118,11971228]},
+  reg:{labels:['LUCILENE','ROSA','KRIS','ALBERTO','GR. CONTAS','JOSEANE'],a:[5343692,3109488,2053918,1427783,1066132,488967],b:[11733073,5505445,4678037,5249183,510050,1243442]}}
 ];
-function fillIqvia(filter=''){
-  const tb=document.querySelector('#iqviaTable tbody');tb.innerHTML='';
-  IQVIA.filter(r=>r[0].toLowerCase().includes(filter.toLowerCase())).forEach(r=>{
-    tb.insertAdjacentHTML('beforeend',
-      `<tr><td><b>${r[0]}</b></td><td class="num">${r[1]}</td><td class="num">${r[2]}</td><td class="num">${r[3]}</td><td class="num">${r[4]}</td></tr>`);
-  });
-}
 
-/* ---------- view initializers ---------- */
-const built={};
-const INIT={
- overview(){
-   new Chart(document.getElementById('ov_growth'),{type:'bar',
-     data:{labels:['HPC','Web','IQVIA (Medic.)','Hospitalar','Farma','Empresa','O.L'],
-       datasets:[{data:[110,91,6.7,-8,-9,-9,-19],borderRadius:6,maxBarThickness:42,
-         backgroundColor:[C.green,C.green,C.bar,'#e07b7b','#e07b7b','#e07b7b','#cf5b5b'],
-         datalabels:{color:'#1f2a38',anchor:'end',align:'end',font:{weight:'bold',size:11},textStrokeWidth:0,textShadowBlur:0,formatter:v=>(v>0?'+':'')+v+'%'}}]},
-     options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:{right:30}},
-       plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>(c.raw>0?'+':'')+c.raw+'%'}}},
-       scales:{x:{grid:{color:'#eef2f7'},ticks:{callback:v=>v+'%'}},y:{grid:{display:false}}}}});
-   new Chart(document.getElementById('ov_fat'),{type:'bar',
-     data:{labels:['Farma','Hospitalar','O.L','HPC','Web','B2List'],
-       datasets:[{label:'YTD26 R$',data:[136751138,52700233,49818695,23156296,16821595,340721],borderRadius:5,maxBarThickness:32,
-         backgroundColor:[C.c1,C.c5,C.c3,C.green,C.c2,C.c4],
-         datalabels:{color:'#1f2a38',anchor:'end',align:'end',clamp:true,font:{weight:'bold',size:10},textStrokeWidth:0,textShadowBlur:0,formatter:v=>fmt(v)}}]},
-     options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:{right:70}},
-       plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>fmtR(c.raw)}}},
-       scales:{x:{grid:{color:'#eef2f7'},ticks:{callback:v=>fmt(v)}},y:{grid:{display:false}}}}});
- },
- iqvia(){
-   fillIqvia();
-   document.getElementById('iqviaSearch').addEventListener('input',e=>fillIqvia(e.target.value));
-   new Chart(document.getElementById('iqvia_share'),{type:'bar',
-     data:{labels:['EUROFARMA','NEO QUIMICA','LEGRAND','BIOLAB','GEOLAB','SANDOZ','NATULAB','PHARLAB','MULTILAB','CELLERA'],
-       datasets:[
-         {label:'Share 25',data:[5.74,16.95,7.31,7.09,7.47,11.62,10.96,10.10,6.07,11.18],backgroundColor:C.c3,borderRadius:4,
-           datalabels:{display:false}},
-         {label:'Share 26',data:[4.95,20.56,5.53,3.73,7.02,11.72,5.56,10.29,7.61,17.43],backgroundColor:C.bar,borderRadius:4,
-           datalabels:{display:false}}
-       ]},
-     options:{responsive:true,maintainAspectRatio:false,
-       plugins:{legend:{position:'top',labels:{usePointStyle:true,boxWidth:8}},tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.raw+'%'}}},
-       scales:{x:{grid:{display:false},ticks:{font:{size:8},maxRotation:60,minRotation:45}},y:{grid:{color:'#eef2f7'},ticks:{callback:v=>v+'%'}}}}});
- },
- empresa(){
-   compChart('emp_comp',[225719017,204942634],[21892,20635],'-9%');
-   shareChart('emp_share',['CD DF','CD ES','CD GO','CD PR','CD RJ','CD SP'],
-     [C.c2,C.dgray,C.c3,C.c4,C.c5,C.c6],[3,5,34,12,14,32],[0,3,22,13,16,46],[225719017,204942634]);
-   shareChart('emp_reg',['LUCILENE SPI/SPC','ROSA GO/DF','KRIS RJ','ALBERTO SUL','GRANDES CONTAS','JOSEANE TLV/OL'],
-     [C.c1,C.c2,C.c3,C.c4,C.c5,C.c6],[48,14,12,12,12,3],[48,18,15,14,2,3],[225719017,204942634]);
-   growthChart('emp_cresc',['ROSA','KRIS','ALBERTO','JOSEANE','LUCILENE','GR. CONTAS'],[20,12,8,-1,-10,-84]);
-   comboChart('emp_fab',['HYPERA S.A.','EUROFARMA LAB','SANDOZ BRASIL','GEOLAB IND','LEGRAND PHARMA','PHARLAB IND','BIOLAB FARMA','MULTILAB IND','NATULAB LAB','CELLERA FARM'],
-     [81005837,26790486,10212368,8187995,8163634,5382932,4211519,3723677,3651870,3337249],[22,-10,-5,-1,-38,-4,-49,21,-33,42],C.bar);
-   comboChart('emp_prod',['NEOSORO 30ML (S)','TORSILAX C/30 (S)','NISTATINA+OX 60GRS (G)','LOSARTANA 50MG (G)','DIPIRONA 1GR C/10 (G)','DIPIRONA ABACAXI (G)','DORALGINA C/20 (S)','NAPROXENO 550MG (G)','EXPEC XPE LEGRAND (S)','TORSILAX C/12 (S)'],
-     [8949065,7987316,7046204,5497099,4989627,2303487,2281911,2281042,2235628,1903142],[17,49,57,81,13,-13,7,12,-66,46],C.green);
- },
- cd(){
-   shareChart('cd_vendas',['CD DF','CD ES','CD GO','CD PR','CD RJ','CD SP'],
-     [C.c2,C.dgray,C.c3,C.c4,C.c5,C.c6],[3,5,34,12,14,32],[0,3,22,13,16,46],[225719017,204942634]);
-   shareChart('cd_devol',['CD DF','CD ES','CD GO','CD PR','CD RJ','CD SP'],
-     [C.c2,C.dgray,C.c3,C.c4,C.c5,C.c6],[3,0,32,6,10,49],[2,0,28,5,8,58],[-4924361,-7092583]);
-   growthChart('cd_cresc',['CD SP','CD GO','CD RJ','CD PR','CD DF','CD ES'],[70,23,19,12,1,-33]);
-   devChart('cd_unid',['FARMA DF','FARMA ES','FARMA GO','FARMA PR','FARMA RJ','FARMA SP','Total Geral'],
-     [-10364,-18,-302821,-49390,-72441,-772814,-1207848],[-10,-98,18,21,-4,149,73],C.bar);
-   devChart('cd_mov',['FARMA DF','FARMA ES','FARMA GO','FARMA PR','FARMA RJ','FARMA SP','Total Geral'],
-     [151,1,1586,1326,828,4472,8364],[16,0,10,49,10,39,30],C.c1);
- },
- farma(){
-   compChart('far_comp',[149462584,136751138],[17858,17571],'-9%');
-   shareChart('far_share',['CD DF','CD ES','CD GO','CD PR','CD RJ','CD SP'],
-     [C.c2,C.dgray,C.c3,C.c4,C.c5,C.c6],[4,8,33,15,18,23],[0,0,26,16,20,38],[149462584,132368138]);
-   shareChart('far_reg',['LUCILENE SPI/SPC','ROSA GO/DF','KRIS RJ','ALBERTO SUL','GRANDES CONTAS','JOSEANE TLV/OL'],
-     [C.c1,C.c2,C.c3,C.c4,C.c5,C.c6],[36,16,16,15,16,2],[39,21,19,17,2,2],[149462584,136751158]);
-   growthChart('far_cresc',['ROSA','KRIS','ALBERTO','LUCILENE','JOSEANE','GR. CONTAS'],[21,9,6,-1,-11,-86]);
- },
- ol(){
-   compChart('ol_comp',[61210957,49818695],[11090,9920],'-19%');
-   shareChart('ol_share',['CD DF','CD GO','CD PR','CD RJ','CD SP'],
-     [C.c2,C.dgray,C.c3,C.c4,C.c5],[4,41,4,2,50],[2,15,4,6,73],[61210957,49818695]);
-   shareChart('ol_reg',['LUCILENE SPI/SPC','ROSA GO/DF','KRIS RJ','ALBERTO SUL','GRANDES CONTAS','JOSEANE TLV/OL'],
-     [C.c1,C.c2,C.c3,C.c4,C.c5,C.c6],[78,10,3,4,3,3],[75,11,5,4,3,2],[61210957,49818695]);
-   growthChart('ol_cresc',['KRIS','ROSA','ALBERTO','JOSEANE','LUCILENE','GR. CONTAS'],[32,-6,-14,-16,-22,-48]);
-   renderOL('lucilene');
- },
- digital(){
-   compChart('web_comp',[8800665,16821595],[3409,4579],'+91%');
-   shareChart('web_share',['CD DF','CD GO','CD PR','CD RJ','CD SP'],
-     [C.c2,C.dgray,C.c3,C.c4,C.c5],[1,24,19,24,32],[2,20,23,20,35],[8800665,16821595]);
-   vmdChart('web_vmd',['Jan','Fev','Mar','Abr','Mai'],[75721,82051,91317,78748,103990],[140315,153068,167429,190912,180904],'+74%');
-   shareChart('web_reg',['LUCILENE SPI/SPC','ROSA GO/DF','KRIS RJ','ALBERTO SUL','GRANDES CONTAS','JOSEANE TLV/OL'],
-     [C.c1,C.c2,C.c3,C.c4,C.c5,C.c6],[36,10,19,16,6,14],[34,16,17,20,0,13],[8800665,16821595]);
-   growthChart('web_cresc',['ROSA','ALBERTO','LUCILENE','JOSEANE','KRIS','GR. CONTAS'],[215,145,80,73,71,-93]);
-   comboChart('web_fab',['HYPERA S.A.','GEOLAB IND','LEGRAND PHARMA','EUROFARMA LAB','PHARLAB IND','MULTILAB IND','NATULAB LAB','VITAMEDIC IND','CELLERA FARM','ZYDUS NIKKHO'],
-     [3835222,1143234,1111812,1081741,598850,569590,507172,368736,359406,347752],[190,62,84,75,102,112,123,34,134,172],C.bar);
-   comboChart('web_prod',['EXPEC XPE LEGRAND (S)','ENXAK C/12 CAZI (S)','NEOSORO 30ML (S)','TORSILAX C/30 (S)','FOSFOMICINA ENV (G)','REPOFLOR C/06 (S)','NEOGERMINA 5ML (S)','DORALGINA C/20 (S)','NATUS GERIN C/50 (S)','NISTATINA+OX 60GRS (G)'],
-     [231095,205392,193511,191941,150344,130097,121690,100805,95267,89601],[23,1251,175,341,100,174,236,302,209,870],C.green);
-   // B2List
-   new Chart(document.getElementById('b2_mensal'),{type:'bar',
-     data:{labels:['Mai','Jun','Jul','Ago','Set','Out','Nov','Dez','jan-26','fev-26','mar-26','abr-26','mai-26'],
-       datasets:[
-         {label:'VD NF',data:[57490,183304,321734,347953,445352,488150,164307,113326,75708,24279,146788,69336,24610],backgroundColor:C.bar,borderRadius:4,
-           datalabels:{anchor:'end',align:'top',color:'#1f2a38',font:{size:8,weight:'bold'},textStrokeWidth:0,textShadowBlur:0,formatter:v=>fmt(v)}},
-         {label:'POS',data:[170,450,767,916,1112,974,459,301,228,72,318,241,89],backgroundColor:C.orange,borderRadius:4,
-           datalabels:{display:false}}
-       ]},
-     options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:18}},
-       plugins:{legend:{position:'top',labels:{usePointStyle:true,boxWidth:8}},
-         title:{display:true,text:'-83% (mar-26 → mai-26)',color:'#e23b3b',font:{size:13,weight:'bold'}},
-         tooltip:{callbacks:{label:c=>c.dataset.label+': '+fmtR(c.raw)}}},
-       scales:{x:{stacked:true,grid:{display:false},ticks:{font:{size:9}}},y:{stacked:true,grid:{color:'#eef2f7'},ticks:{callback:v=>fmt(v)}}}}});
-   shareChart('b2_comp',['LUCILENE SPI/SPC','ROSA GO/DF','KRIS RJ','ALBERTO SUL','GRANDES CONTAS','JOSEANE TLV/OL'],
-     [C.c1,C.c2,C.c3,C.c4,C.c5,C.c6],[43,30,15,7,5,1],[30,31,30,8,1,1],[123563,340721]);
-   shareChart('b2_share',['CD DF','CD GO','CD PR','CD RJ','CD SP'],
-     [C.c2,C.dgray,C.c3,C.c4,C.c5],[0,31,18,7,44],[1,30,8,30,31],[123563,340721]);
-   vmdChart('b2_vmd',['Jan','Fev','Mar','Abr','Mai'],null,[4453,2207,7725,4078,1641],null);
-   comboChart('b2_fab',['HYPERA S.A.','LEGRAND PHARMA','GEOLAB IND','EUROFARMA LAB','PHARMASCIENCE','PHARLAB IND','G-TECH','SANCHEZ CANO','ARTE NATIVA','SANDOZ BRASIL'],
-     [116023,66051,23586,16981,12885,11056,9438,7969,7902,6579],null,C.bar);
-   comboChart('b2_prod',['NEOSORO 30ML (S)','EXPEC XPE LEGRAND (S)','NATUS GERIN C/50 (S)','NISTATINA+OX 60GRS (G)','LOSARTANA 50MG (G)','REPOFLOR C/06 (S)','DIPIRONA 1GR C/10 (G)','NEOGERMINA 5ML (S)','CISTEIL 600MG GEOLAB (S)','DIPIRONA ABACAXI (G)'],
-     [38220,35791,14351,14136,12168,7980,7720,6873,6827,6075],null,C.green);
- },
- hpc(){
-   compChart('hpc_comp',[11029082,23156296],[14319,16526],'+110%');
-   shareChart('hpc_share',['CD DF','CD ES','CD GO','CD PR','CD RJ','CD SP'],
-     [C.c2,C.dgray,C.c3,C.c4,C.c5,C.c6],[0,4,30,11,19,36],[0,4,21,17,17,41],[11029082,23156296]);
-   vmdChart('hpc_vmd',['Jan','Fev','Mar','Abr','Mai'],[94310,98449,107561,103320,136916],[186891,220836,211874,241126,288639],'+111%');
-   shareChart('hpc_reg',['LUCILENE SPI/SPC','ROSA GO/DF','KRIS RJ','ALBERTO SUL','GRANDES CONTAS','JOSEANE TLV/OL'],
-     [C.c1,C.c2,C.c3,C.c4,C.c5,C.c6],[39,24,15,10,8,4],[41,19,17,18,1,4],[11029082,23156296]);
-   growthChart('hpc_cresc',['ALBERTO','JOSEANE','KRIS','LUCILENE','ROSA','GR. CONTAS'],[258,146,129,120,67,-62]);
-   comboChart('hpc_fab',['SANCHEZ CANO','KATIGUA NUTRIC','NUTRIN GROUP','HERBAMED LAB','G-TECH','ARTE NATIVA','FARMAX','BIO INSTINTO','LAB PONTELAND','DKT'],
-     [3234492,2307853,2225302,2137486,2128301,1580163,1121259,1057762,764200,633145],null,C.bar);
-   comboChart('hpc_prod',['FINI MELAT 60G','FINI MELAT 120G','OMEGA 3 KATIGUA','INALADOR G-TECH','POMADA FISIOFORT','AP PRESSAO G-TECH','GUMMY NIGHT (S)','POMADA LANSINOH','SORO SORIMAX (S)','SAYA CONTROL DKT'],
-     [1455494,1136324,590502,576259,484896,429786,407363,380236,354427,341156],null,C.green);
- },
- hospitalar(){
-   compChart('hosp_comp',[57158892,52700233],[1658,1408],'-8%');
-   const hcVar=[-9,-17,16,-13,-12,-8];
-   new Chart(document.getElementById('hosp_comp2'),{
-     data:{labels:['Jan','Fev','Mar','Abr','Mai','Total Geral'],datasets:[
-       {type:'bar',label:'2025',data:[13178701,11599128,9357473,10907134,12116455,57158892],backgroundColor:C.bar,borderRadius:4,maxBarThickness:30,order:3,datalabels:{display:false}},
-       {type:'bar',label:'2026',data:[12049291,9637645,10898033,9486828,10628434,52700233],backgroundColor:C.orange,borderRadius:4,maxBarThickness:30,order:3,datalabels:{display:false}},
-       {type:'line',label:'Performance 2026',data:[12049291,9637645,10898033,9486828,10628434,null],yAxisID:'y',order:1,
-         borderColor:'#d6219e',backgroundColor:'rgba(214,33,158,.08)',borderWidth:3.5,tension:.35,fill:false,
-         pointRadius:4,pointHoverRadius:6,pointBackgroundColor:'#d6219e',pointBorderColor:'#fff',pointBorderWidth:1.5,datalabels:{display:false}},
-       {type:'line',label:'Variação 25→26',data:hcVar,yAxisID:'y1',order:2,borderColor:'#46586e',borderWidth:2,tension:.3,
-         pointRadius:5,pointHoverRadius:6,pointBackgroundColor:c=>hcVar[c.dataIndex]>=0?C.green:'#e23b3b',pointBorderColor:'#fff',pointBorderWidth:1.5,
-         datalabels:{align:'top',anchor:'end',color:c=>hcVar[c.dataIndex]>=0?C.green:'#e23b3b',font:{size:10,weight:'bold'},
-           textStrokeColor:'#fff',textStrokeWidth:3,textShadowBlur:0,formatter:v=>(v>=0?'▲ +':'▼ ')+v+'%'}}
-     ]},
-     options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:26}},
-       plugins:{legend:{position:'top',labels:{usePointStyle:true,boxWidth:8}},
-         tooltip:{callbacks:{label:c=>c.dataset.label==='Variação 25→26'?'Variação: '+(c.raw>=0?'+':'')+c.raw+'%':c.dataset.label+': '+fmtR(c.raw)}}},
-       scales:{x:{grid:{display:false}},
-         y:{grid:{color:'#eef2f7'},ticks:{callback:v=>fmt(v)}},
-         y1:{position:'right',grid:{drawOnChartArea:false},suggestedMin:-28,suggestedMax:28,ticks:{callback:v=>v+'%'}}}}});
-   shareChart('hosp_share',['HOSP - GO','HOSP - GO CONTRATO','HOSP - GO RIO','HOSP - RJ','HOSP - RJ CONTRATO','HOSP - RJ LICITAÇÃO'],
-     [C.c1,C.c2,C.c3,C.c4,C.c5,C.c6],[9,2,0,68,20,1],[13,9,1,46,31,1],[57158892,52700233]);
-   growthChart('hosp_cresc',['GO CONTRATO','GO RIO','RJ CONTRATO','GO','RJ LICITAÇÃO','RJ'],[301,100,43,31,-9,-37]);
-   comboChart('hosp_fab',['CSL BEHRING','BIGFRAL','BLAU','HALEX ISTAR','POLAR FIX HOSP','EUGIA','KEDRION','EQUIPLEX','FARMARIN','HEBRON'],
-     [21457174,7868709,2892233,1980377,1923261,1690122,1500732,1358009,1291388,1029206],[99,4,-79,-23,-25,133,-23,-11,-15,-1],C.bar);
-   comboChart('hosp_prod',['SANDOGLOBULINA 50ML','ALBUREX 20% 50ML','FRALDA BIGFRAL DERMA','IG VENA 5G 100ML','ERTAPENEM 1G FA','HAEMOCOMPLETTAN 2G','RHOPHYLAC 300MCG','FRALDA BIGFRAL PLUS','HAEMOCOMPLETTAN P 1G','BERIPLAST P 1ML'],
-     [11853695,3386355,2203479,1500732,1264654,1178239,1138229,1114516,1030420,992796],[680,210,-8,-12,138,26,-29,290,-44,-9],C.green);
- }
+const INS={
+ FARMA:['Canal praticamente estável no ano (+0,5%); Hypera (+24,3%) puxa o crescimento.','Quedas fortes: Legrand −44,7% e Biolab −52,7%.','Hypera concentra ~43% do faturamento do canal.'],
+ OL:['Canal caiu −23,57%; Lucilene é o maior regional (R$ 46,8 mi).','Eurofarma e Hypera respondem por ~73% de OL.','Biolab recuou −69% no canal.'],
+ WEB:['Maior crescimento do período: +91,98%.','Hypera quase triplicou (+164%); POS subiu de 3,7k → 4,9k.','Canal ganhando participação relevante.'],
+ B2LIST:['Base pequena, mas +35,29% no ano.','Legrand (+347%) e Pharmascience disparam.','Hypera lidera, porém estável (−3%).'],
+ HPC:['Crescimento expressivo: +114,36%.','Sanchez Cano e G-Tech entram forte; Katigua lidera recorrentes.','POS subiu de 15,2k → 17,3k.']
 };
+function insBox(id){return INS[id]?'<div class="insight"><b>Insights</b><ul>'+INS[id].map(x=>'<li>'+x+'</li>').join('')+'</ul></div>':'';}
+function kpiRow(c){const col=c.varCls==='pos'?'var(--verde)':'var(--vermelho)';return '<div class="kpis">'
+  +'<div class="kpi"><div class="l">Venda 2026</div><div class="v">'+brl(c.v26)+'</div></div>'
+  +'<div class="kpi"><div class="l">Venda 2025</div><div class="v">'+brl(c.v25)+'</div></div>'
+  +'<div class="kpi"><div class="l">Variação ano</div><div class="v" style="color:'+col+'">'+c.varTxt+'</div></div>'
+  +'<div class="kpi"><div class="l">POS 26/25</div><div class="v">'+fmt(c.pos26)+'/'+fmt(c.pos25)+'</div></div></div>';}
+function fabProdBlock(c){return '<div class="grid2">'
+  +'<div><div class="htitle">Top 10 Fabricantes</div><div class="controls" data-tog="'+c.id+'fab"><button data-v="comp" class="on">25×26</button><button data-v="var">Var %</button></div><div class="barbox" id="c'+c.id+'fab"></div></div>'
+  +'<div><div class="htitle">Top 10 Produtos</div><div class="controls" data-tog="'+c.id+'prod"><button data-v="comp" class="on">25×26</button><button data-v="var">Var %</button></div><div class="barbox" id="c'+c.id+'prod"></div></div></div>';}
 
-/* ---------- navigation ---------- */
-const TITLES={overview:['Resumo / Visão Geral','Visão Geral'],iqvia:['Resumo / IQVIA','IQVIA · Mercado'],
- empresa:['Canais / Empresa','Empresa'],cd:['Canais / C.D.','C.D. · Centro de Distribuição'],farma:['Canais / Farma','Farma'],ol:['Canais / O.L','O.L'],
- digital:['Canais / Digital','Digital · Web & B2List'],hpc:['Canais / HPC','HPC'],hospitalar:['Canais / Hospitalar','Hospitalar']};
-function show(view){
-  document.querySelectorAll('.nav a').forEach(a=>a.classList.toggle('active',a.dataset.view===view));
-  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-  document.getElementById('view-'+view).classList.add('active');
-  document.getElementById('crumb').textContent=TITLES[view][0];
-  document.getElementById('ptitle').textContent=TITLES[view][1];
-  if(!built[view]){INIT[view]();built[view]=true;}
-  animateCounters(document.getElementById('view-'+view));
-  document.querySelector('.scroll').scrollTop=0;
-  document.getElementById('nav').classList.remove('open');
-}
-document.querySelectorAll('.nav a').forEach(a=>a.addEventListener('click',()=>show(a.dataset.view)));
-document.getElementById('hamb').addEventListener('click',()=>document.getElementById('nav').classList.toggle('open'));
-
-/* O.L regional tabs */
-document.getElementById('olTabs').addEventListener('click',e=>{
-  if(e.target.tagName!=='BUTTON')return;
-  document.querySelectorAll('#olTabs button').forEach(b=>b.classList.remove('active'));
-  e.target.classList.add('active');renderOL(e.target.dataset.ol);
+CANAIS.forEach(c=>{
+  const sbBtns=c.subs?c.subs.map(s=>'<button data-t="'+c.id+'_'+s.id+'">Fab · '+s.nome+'</button>').join(''):'';
+  const sbPanels=c.subs?c.subs.map(s=>'<div class="tabpanel" data-p="'+c.id+'_'+s.id+'"><div class="card"><div class="htitle">Top Fabricantes — '+s.nome+'</div><div class="controls" data-tog="'+c.id+s.id+'fab"><button data-v="comp" class="on">25×26</button><button data-v="var">Var %</button></div><div class="barbox" id="c'+c.id+s.id+'fab"></div></div></div>').join(''):'';
+  let inner='<h2 class="sec">Canal '+c.nome+'</h2><p class="sub">YTD Junho · 2025 × 2026</p>'+insBox(c.id)
+    +'<div class="tabgroup"><div class="tabbar">'
+      +'<button data-t="'+c.id+'_perf" class="on">Performance</button>'
+      +'<button data-t="'+c.id+'_emp">Empresa</button>'
+      +'<button data-t="'+c.id+'_reg">Regional</button>'
+      +'<button data-t="'+c.id+'_fab">Top Fabricantes</button>'
+      +'<button data-t="'+c.id+'_prod">Top Produtos</button>'+sbBtns+'</div>'
+    +'<div class="tabpanel active" data-p="'+c.id+'_perf"><div class="card">'+kpiRow(c)
+      +'<div class="controls" data-ytd="'+c.id+'"><button data-m="venda" class="on">Venda</button><button data-m="pos">POS</button><button data-m="vmd">VMD</button></div>'
+      +'<div class="barbox" id="cYtd_'+c.id+'"></div></div></div>'
+    +'<div class="tabpanel" data-p="'+c.id+'_emp"><div class="card"><div class="htitle">Venda por empresa (CD)</div><div class="barbox" id="c'+c.id+'emp"></div></div></div>'
+    +'<div class="tabpanel" data-p="'+c.id+'_reg"><div class="card"><div class="htitle">Venda por regional</div><div class="barbox" id="c'+c.id+'reg"></div></div></div>'
+    +'<div class="tabpanel" data-p="'+c.id+'_fab"><div class="card"><div class="htitle">Top 10 Fabricantes</div><div class="controls" data-tog="'+c.id+'fab"><button data-v="comp" class="on">25×26</button><button data-v="var">Var %</button></div><div class="barbox" id="c'+c.id+'fab"></div></div></div>'
+    +'<div class="tabpanel" data-p="'+c.id+'_prod"><div class="card"><div class="htitle">Top 10 Produtos</div><div class="controls" data-tog="'+c.id+'prod"><button data-v="comp" class="on">25×26</button><button data-v="var">Var %</button></div><div class="barbox" id="c'+c.id+'prod"></div></div></div>'
+    +sbPanels+'</div>';
+  document.getElementById('panel-'+c.id).innerHTML=inner;
+  regYtd(c.id,c.ytd);
+  regGroup('c'+c.id+'emp',c.emp.labels,c.emp.a,c.emp.b,brl);
+  regGroup('c'+c.id+'reg',c.reg.labels,c.reg.a,c.reg.b,brl);
+  regTogFab(c.id+'fab','c'+c.id+'fab',c.fab,c.v26);
+  regTog(c.id+'prod','c'+c.id+'prod',c.prod);
+  if(c.subs)c.subs.forEach(s=>regTogFab(c.id+s.id+'fab','c'+c.id+s.id+'fab',s.fab,s.tot));
 });
-/* Digital tabs */
-document.getElementById('digTabs').addEventListener('click',e=>{
-  if(e.target.tagName!=='BUTTON')return;
-  document.querySelectorAll('#digTabs button').forEach(b=>b.classList.remove('active'));
-  e.target.classList.add('active');
-  const k=e.target.dataset.dig;
-  document.getElementById('dig-web').classList.toggle('active',k==='web');
-  document.getElementById('dig-b2').classList.toggle('active',k==='b2');
-});
 
-/* counters */
-function animateCounters(scope){
-  scope.querySelectorAll('.count').forEach(el=>{
-    if(el.dataset.done)return;el.dataset.done='1';
-    const target=parseFloat(el.dataset.target),dec=parseInt(el.dataset.dec||'0');
-    const dur=900,t0=performance.now();
-    function step(t){const p=Math.min((t-t0)/dur,1);const e=1-Math.pow(1-p,3);
-      el.textContent=(target*e).toLocaleString('pt-BR',{minimumFractionDigits:dec,maximumFractionDigits:dec});
-      if(p<1)requestAnimationFrame(step);}
-    requestAnimationFrame(step);
-  });
+/* abas */
+function bindTabs(){
+  const tb=document.getElementById('topbar'),topBtns=[...tb.querySelectorAll('button[data-t]')],topPanels=[...document.querySelectorAll('main > .tabpanel')];
+  topBtns.forEach(btn=>btn.addEventListener('click',()=>{topBtns.forEach(b=>b.classList.remove('on'));btn.classList.add('on');
+    topPanels.forEach(p=>p.classList.toggle('active',p.dataset.p===btn.dataset.t));
+    document.body.classList.toggle('on-capa',btn.dataset.t==='capa');renderVisible();}));
+  document.querySelectorAll('.tabgroup').forEach(grp=>{const kids=[...grp.children],bar=kids.find(c=>c.classList.contains('tabbar'));if(!bar)return;
+    const btns=[...bar.querySelectorAll('button[data-t]')],panels=kids.filter(c=>c.classList.contains('tabpanel'));
+    btns.forEach(btn=>btn.addEventListener('click',()=>{btns.forEach(b=>b.classList.remove('on'));btn.classList.add('on');
+      panels.forEach(p=>p.classList.toggle('active',p.dataset.p===btn.dataset.t));renderVisible();}));});
 }
-
-/* boot */
-INIT.overview();built.overview=true;animateCounters(document.getElementById('view-overview'));
+bindTabs();document.body.classList.add('on-capa');renderVisible();
+const gp=document.getElementById('goPanel');if(gp)gp.addEventListener('click',()=>{const b=document.querySelector('#topbar button[data-t="iqvia"]');if(b)b.click();});
+const tmL=document.getElementById('tm-light'),tmD=document.getElementById('tm-dark');
+function setTema(dark){document.body.classList.toggle('tema-marinho',dark);tmD.classList.toggle('on',dark);tmL.classList.toggle('on',!dark);try{localStorage.setItem('tema',dark?'dark':'light');}catch(e){}}
+tmL.addEventListener('click',()=>setTema(false));tmD.addEventListener('click',()=>setTema(true));
+try{if(localStorage.getItem('tema')==='dark')setTema(true);}catch(e){}
 </script>
 </body>
 </html>

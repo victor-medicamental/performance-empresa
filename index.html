@@ -109,6 +109,24 @@
 /* --- marca padrao (fonte do estudo Regionais) --- */
 .capactt .logo{font-family:'Segoe UI',Roboto,Arial,sans-serif;font-size:30px;font-weight:800;letter-spacing:.5px}
 </style>
+<style id="mm-padrao">
+/* ===== PADRAO MM: barra de abas superior e largura (itens 2 e 3) ===== */
+/* 2. nav superior no padrao: #0b3d68, inativo #cfe0ef, ativo branco + #7fc4ff */
+.topbar{background:#0b3d68;padding:0 20px;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.brand{color:#fff;font-size:22px;font-weight:800;letter-spacing:.5px;padding:13px 4px;margin-right:20px}
+.topbar button{color:#cfe0ef;font-size:13.5px;font-weight:600;padding:13px 18px;
+  border-bottom:3px solid transparent}
+.topbar button:hover{color:#fff;background:rgba(255,255,255,.06)}
+.topbar button.on{color:#fff;border-bottom-color:#7fc4ff;background:rgba(255,255,255,.10)}
+.themesw button{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.4);color:#fff;
+  border-radius:20px;padding:7px 16px;font-size:12.5px;font-weight:700}
+.themesw button.on{background:#fff;border-color:#fff;color:#0b3d68}
+/* 3. conteudo em 1600px centralizado; a capa continua full bleed */
+main{max-width:1600px;margin-left:auto;margin-right:auto;min-height:calc(100vh - 60px)}
+body.on-capa main{max-width:none}
+/* a barra ficou com 59px: acerta a altura da capa para nao sobrar rolagem */
+.capa{width:auto;margin-left:0;min-height:calc(100vh - 60px)}
+</style>
 </head>
 <body>
 
@@ -447,5 +465,19 @@ function setTema(dark){document.body.classList.toggle('tema-marinho',dark);tmD.c
 tmL.addEventListener('click',()=>setTema(false));tmD.addEventListener('click',()=>setTema(true));
 try{if(localStorage.getItem('tema')==='dark')setTema(true);}catch(e){}
 </script>
+<script>/* mm-svgfit */(function(){var F=1.15;
+function ig(s){if(s.closest('#mmCover'))return true;var c=s.getAttribute('class')||'';
+ if(/mm-cover-bg|bgart|capabg|cover-bg|cv-art/i.test(c))return true;
+ var p=s.parentElement;if(p){var pc=p.getAttribute('class')||'',pi=p.id||'';
+  if(/^(bg|capa|cover|cv-cover)$/i.test(pc)||/^(cover|capa)$/i.test(pi))return true;}
+ var pa=s.getAttribute('preserveAspectRatio');if(pa&&/slice/.test(pa))return true;return false;}
+function fit(){document.querySelectorAll('svg[viewBox]').forEach(function(s){if(ig(s))return;
+ var vb=(s.getAttribute('viewBox')||'').trim().split(/[\s,]+/),w=parseFloat(vb[2]);if(!(w>0))return;
+ s.style.maxWidth=Math.round(w*F)+'px';s.style.width='100%';s.style.display='block';
+ s.style.marginLeft='auto';s.style.marginRight='auto';});}
+var t=null;function ag(){clearTimeout(t);t=setTimeout(fit,60);}
+if(document.readyState!=='loading')ag();else document.addEventListener('DOMContentLoaded',ag);
+window.addEventListener('resize',ag);
+try{new MutationObserver(ag).observe(document.body,{childList:true,subtree:true});}catch(e){}})();</script>
 </body>
 </html>

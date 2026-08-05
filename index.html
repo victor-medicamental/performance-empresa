@@ -94,6 +94,17 @@
   body.tema-marinho .tabbar button.on,body.tema-marinho .controls button.on{background:var(--azul2);color:#fff;border-color:var(--azul2)}
   body.tema-marinho .pagefoot{background:#0a1526;color:#9db6d6;border-top-color:#26364f}
 </style>
+<style id="mm-credit-style">
+/* ===== Creditos da capa (mm) ===== */
+.mm-credit-wrap{position:relative;z-index:5;text-align:center;margin:16px auto 0;width:100%}
+.mm-cover-credit{display:inline-flex;gap:38px;justify-content:center;align-items:flex-start;
+  background:rgba(127,196,255,.07);border:1px solid rgba(127,196,255,.22);border-radius:12px;padding:11px 26px;
+  font-family:'Segoe UI',system-ui,-apple-system,Arial,sans-serif}
+.mm-cover-credit>div{display:flex;flex-direction:column;gap:3px;text-align:left}
+.mm-cover-credit .k{font-size:9.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#7fc4ff;opacity:.9;line-height:1.2}
+.mm-cover-credit .v{font-size:13.5px;font-weight:700;color:#fff;white-space:nowrap;line-height:1.25}
+@media(max-width:640px){.mm-cover-credit{gap:20px;padding:10px 16px}}
+</style>
 </head>
 <body>
 
@@ -143,7 +154,9 @@
         <button class="enter" id="goPanel">Acessar o painel →</button>
       </div>
       <div class="capafoot">Dados internos · Gerado a partir dos painéis Power BI</div>
-      <div class="capamarca">Victor Santos</div>
+<div class="mm-credit-wrap"><div class="mm-cover-credit"><div><span class="k">Criado por</span><span class="v">Victor Santos</span></div><div><span class="k">Atualizado em</span><span class="v">29/07/2026</span></div></div></div>
+
+      
     </div>
   </div>
 
@@ -203,8 +216,6 @@
   <div class="tabpanel" data-p="B2LIST" id="panel-B2LIST"></div>
   <div class="tabpanel" data-p="HPC" id="panel-HPC"></div>
 </main>
-
-<footer class="pagefoot">Victor Santos</footer>
 
 <script>
 const pv=(a,b)=>b?((a-b)/b*100):100;
@@ -432,6 +443,5 @@ function setTema(dark){document.body.classList.toggle('tema-marinho',dark);tmD.c
 tmL.addEventListener('click',()=>setTema(false));tmD.addEventListener('click',()=>setTema(true));
 try{if(localStorage.getItem('tema')==='dark')setTema(true);}catch(e){}
 </script>
-<div id="atualizado-em" style="position:fixed;top:10px;right:14px;z-index:99999;font-family:Arial,sans-serif;font-size:12px;color:#fff;background:rgba(0,0,0,.6);padding:4px 10px;border-radius:6px;">Atualizado em: 29/07/2026</div>
 </body>
 </html>

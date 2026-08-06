@@ -107,7 +107,6 @@
   <button data-t="WEB">WEB</button>
   <button data-t="B2LIST">B2LIST</button>
   <button data-t="HPC">HPC</button>
-  <span class="themesw"><button id="tm-light" class="on">Light</button><button id="tm-dark">Dark</button></span>
 </div>
 
 <main>
@@ -209,6 +208,7 @@
 <script>
 const pv=(a,b)=>b?((a-b)/b*100):100;
 function vcell(at,an){if(an==null||an<=0)return '<td>—</td>';const v=(at-an)/an*100,c=v>=0?'pn':'nn';return '<td class="'+c+'">'+(v>=0?'+':'')+v.toFixed(1)+'%</td>';}
+function vcellDev(at,an){if(an==null||Math.abs(an)==0)return '<td>—</td>';const v=(Math.abs(at)-Math.abs(an))/Math.abs(an)*100,c=v>0?'nn':'pn';return '<td class="'+c+'">'+(v>=0?'+':'')+v.toFixed(1)+'%</td>';}
 const brl=v=>(v<0?"-":"")+"R$ "+Math.abs(Math.round(v)).toLocaleString("pt-BR");
 const fmt=v=>Math.round(v).toLocaleString("pt-BR");
 const SPECS={},built=new Set();
@@ -217,6 +217,12 @@ function tableHTML(labels,a,b,fmtFn){
   let h='<table class="dt"><thead><tr><th>Item</th><th>2025</th><th>2026</th><th>Var.</th></tr></thead><tbody>';
   for(let i=0;i<labels.length;i++){
     h+='<tr><td>'+labels[i]+'</td><td>'+fmtFn(a[i])+'</td><td>'+fmtFn(b[i])+'</td>'+vcell(b[i],a[i])+'</tr>';}
+  return h+'</tbody></table>';
+}
+function tableDev(labels,a,b,fmtFn){
+  let h='<table class="dt"><thead><tr><th>Item</th><th>2025</th><th>2026</th><th>Var.</th></tr></thead><tbody>';
+  for(let i=0;i<labels.length;i++){
+    h+='<tr><td>'+labels[i]+'</td><td>'+fmtFn(a[i])+'</td><td>'+fmtFn(b[i])+'</td>'+vcellDev(b[i],a[i])+'</tr>';}
   return h+'</tbody></table>';
 }
 function tableFab(labels,a,b,total){
@@ -250,6 +256,7 @@ function barsVarHTML(labels,a,b){
 }
 function barsGroup(id,labels,a,b,fmtFn){const el=document.getElementById(id);if(el)el.innerHTML=barsHTML(labels,a,b,fmtFn)+tableHTML(labels,a,b,fmtFn);}
 function barsSplit(id,labels,a,b,fmtFn){const el=document.getElementById(id);if(el)el.innerHTML='<div class="split"><div>'+tableHTML(labels,a,b,fmtFn)+'</div><div>'+barsHTML(labels,a,b,fmtFn)+'</div></div>';}
+function barsSplitDev(id,labels,a,b,fmtFn){const el=document.getElementById(id);if(el)el.innerHTML='<div class="split"><div>'+tableDev(labels,a,b,fmtFn)+'</div><div>'+barsHTML(labels,a,b,fmtFn)+'</div></div>';}
 function barsVar(id,labels,a,b){const el=document.getElementById(id);if(el)el.innerHTML=barsVarHTML(labels,a,b)+tableHTML(labels,a,b,brl);}
 function regTogFab(key,id,D,total){
   SPECS[id]=()=>{const el=document.getElementById(id);if(el)el.innerHTML=barsHTML(D.labels,D.a,D.b,brl)+tableFab(D.labels,D.a,D.b,total);};
@@ -288,10 +295,10 @@ function regYtd(key,Y){const id='cYtd_'+key,M=['Jan','Fev','Mar','Abr','Mai','Ju
     if(m==='vmd')lineChart(id,M,Y.vmd.a,Y.vmd.b,brl);
     else barsSplit(id,M,Y[m].a,Y[m].b,m==='pos'?fmt:brl);}));}
 function regDev(key,D){const id='cDev';
-  SPECS[id]=()=>barsSplit(id,D.labels,D.valor.a,D.valor.b,brl);
+  SPECS[id]=()=>barsSplitDev(id,D.labels,D.valor.a,D.valor.b,brl);
   document.querySelectorAll('[data-dev="'+key+'"] button').forEach(btn=>btn.addEventListener('click',()=>{
     document.querySelectorAll('[data-dev="'+key+'"] button').forEach(x=>x.classList.remove('on'));btn.classList.add('on');
-    const m=btn.dataset.m;barsSplit(id,D.labels,D[m].a,D[m].b,m==='valor'?brl:fmt);}));}
+    const m=btn.dataset.m;barsSplitDev(id,D.labels,D[m].a,D[m].b,m==='valor'?brl:fmt);}));}
 function renderVisible(){document.querySelectorAll('.barbox').forEach(el=>{
   if(el.offsetParent!==null&&SPECS[el.id]&&!built.has(el.id)){SPECS[el.id]();built.add(el.id);}});}
 
@@ -427,10 +434,6 @@ function bindTabs(){
 }
 bindTabs();document.body.classList.add('on-capa');renderVisible();
 const gp=document.getElementById('goPanel');if(gp)gp.addEventListener('click',()=>{const b=document.querySelector('#topbar button[data-t="iqvia"]');if(b)b.click();});
-const tmL=document.getElementById('tm-light'),tmD=document.getElementById('tm-dark');
-function setTema(dark){document.body.classList.toggle('tema-marinho',dark);tmD.classList.toggle('on',dark);tmL.classList.toggle('on',!dark);try{localStorage.setItem('tema',dark?'dark':'light');}catch(e){}}
-tmL.addEventListener('click',()=>setTema(false));tmD.addEventListener('click',()=>setTema(true));
-try{if(localStorage.getItem('tema')==='dark')setTema(true);}catch(e){}
 </script>
 </body>
 </html>

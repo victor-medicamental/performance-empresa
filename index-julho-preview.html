@@ -151,17 +151,17 @@
     <h2 class="sec">IQVIA — Mercado (YTD PPP R$)</h2>
     <p class="sub">Vendas do mercado e share do Grupo Medicamental. YTD 05/25 × 05/26.</p>
     <div class="insight"><b>Insights</b><ul>
-      <li>Mercado cresceu +8,98% no YTD (R$ 3,55 bi → 3,86 bi).</li>
-      <li>Neo Química ganhou share Medicamental (17,18% → 20,26%); Eurofarma é o maior em R$.</li>
-      <li>Share total do grupo em 6,27%.</li></ul></div>
+      <li>Mercado cresceu +7,55% no YTD (R$ 4,84 bi → 5,20 bi).</li>
+      <li>Neo Química ganhou share Medicamental (16,67% → 19,17%); Eurofarma é o maior em R$.</li>
+      <li>Share total do grupo em 5,61%.</li></ul></div>
     <div class="card">
       <div class="kpis">
-        <div class="kpi"><div class="l">YTD 05/26</div><div class="v">R$ 3,86 bi</div></div>
-        <div class="kpi"><div class="l">YTD 05/25</div><div class="v">R$ 3,55 bi</div></div>
-        <div class="kpi"><div class="l">Cresc. mercado</div><div class="v htext">+8,98%</div></div>
-        <div class="kpi"><div class="l">Share Medicamental</div><div class="v">6,27%</div></div>
-        <div class="kpi"><div class="l">Cresc. Concorrentes</div><div class="v htext">+9,20%</div></div>
-        <div class="kpi"><div class="l">Cresc. Grupo Medicamental</div><div class="v htext">+5,88%</div></div>
+        <div class="kpi"><div class="l">YTD 05/26</div><div class="v">R$ 5,20 bi</div></div>
+        <div class="kpi"><div class="l">YTD 05/25</div><div class="v">R$ 4,84 bi</div></div>
+        <div class="kpi"><div class="l">Cresc. mercado</div><div class="v htext">+7,55%</div></div>
+        <div class="kpi"><div class="l">Share Medicamental</div><div class="v">5,61%</div></div>
+        <div class="kpi"><div class="l">Cresc. Concorrentes</div><div class="v htext">+7,63%</div></div>
+        <div class="kpi"><div class="l">Cresc. Grupo Medicamental</div><div class="v htext">+6,23%</div></div>
       </div>
       <div class="htitle">Top 10 Mercado — laboratórios (Vendas PPP)</div>
       <div class="barbox" id="cIqvia"></div>
@@ -173,7 +173,7 @@
   </div>
 
   <div class="tabpanel" data-p="empresa">
-    <h2 class="sec">Empresa — Performance Geral · YTD Junho (2025 × 2026)</h2>
+    <h2 class="sec">Empresa — Performance Geral · YTD Julho (2025 × 2026)</h2>
     <div class="tabgroup">
       <div class="tabbar">
         <button data-t="e_ytd" class="on">Performance</button>
@@ -390,7 +390,7 @@ function fabProdBlock(c){return '<div class="grid2">'
 CANAIS.forEach(c=>{
   const sbBtns=c.subs?c.subs.map(s=>'<button data-t="'+c.id+'_'+s.id+'">Fab · '+s.nome+'</button>').join(''):'';
   const sbPanels=c.subs?c.subs.map(s=>'<div class="tabpanel" data-p="'+c.id+'_'+s.id+'"><div class="card"><div class="htitle">Top Fabricantes — '+s.nome+'</div><div class="controls" data-tog="'+c.id+s.id+'fab"><button data-v="comp" class="on">25×26</button><button data-v="var">Var %</button></div><div class="barbox" id="c'+c.id+s.id+'fab"></div></div></div>').join(''):'';
-  let inner='<h2 class="sec">Canal '+c.nome+'</h2><p class="sub">YTD Junho · 2025 × 2026</p>'+insBox(c.id)
+  let inner='<h2 class="sec">Canal '+c.nome+'</h2><p class="sub">YTD Julho · 2025 × 2026</p>'+insBox(c.id)
     +'<div class="tabgroup"><div class="tabbar">'
       +'<button data-t="'+c.id+'_perf" class="on">Performance</button>'
       +'<button data-t="'+c.id+'_emp">Empresa</button>'

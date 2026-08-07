@@ -49,6 +49,11 @@
   .enter:hover{background:#eaf1fb}
   .capafoot{position:relative;z-index:1;margin-top:34px;font-size:12px;color:#7f97ba}
   .capamarca{position:absolute;right:18px;bottom:12px;z-index:1;font-style:italic;font-weight:600;color:rgba(219,230,245,.55);font-size:13px}
+  .capainfo{display:inline-flex;margin-top:22px;border:1px solid rgba(255,255,255,.18);border-radius:10px;overflow:hidden;background:rgba(255,255,255,.05)}
+  .capainfo>div{padding:10px 22px;text-align:left}
+  .capainfo>div+div{border-left:1px solid rgba(255,255,255,.18)}
+  .capainfo .cil{font-size:10.5px;letter-spacing:1.2px;color:#9db6d6;text-transform:uppercase}
+  .capainfo .civ{font-size:14px;font-weight:700;color:#eaf1fb;margin-top:3px}
   .pos{color:#7CFFB0}.neg{color:#ffb0a8}.htext{color:var(--verde)}
   .pagefoot{text-align:right;padding:14px clamp(14px,3vw,40px);color:var(--mut);font-style:italic;font-weight:600;font-size:13px;border-top:1px solid var(--linha);background:#fff}
   /* barras (offline) */
@@ -140,6 +145,7 @@
         <p class="ccaps">MÊS BASE JULHO/2026 · PERFORMANCE YTD · JANEIRO A JULHO 2026</p>
         <div class="obs">⚠ Observação: este estudo <b>não contém</b> o centro de custo <b>Mesa de Negócios</b>.</div>
         <button class="enter" id="goPanel">Acessar o painel →</button>
+        <div class="capainfo"><div><div class="cil">Criado por</div><div class="civ">Victor Santos</div></div><div><div class="cil">Atualizado em</div><div class="civ">07/08/2026</div></div></div>
       </div>
       <div class="capafoot">Dados internos · Gerado a partir dos painéis Power BI</div>
       <div class="capamarca">Victor Santos</div>
